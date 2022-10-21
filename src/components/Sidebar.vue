@@ -58,6 +58,27 @@
           </router-link> 
         </el-tooltip>
       <!-- </div> -->
+
+      <!-- Productos -->
+      <!-- <div v-if="tipoUsuario == 1"> -->
+        <router-link class="button" to="/productos" v-if="is_expanded">
+          <i class="pi pi-box material-icons"></i>
+          <span class="text">Productos</span>
+        </router-link>   
+
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="Usuarios"
+          placement="right-start"
+          v-if="!is_expanded"
+        >
+          <router-link class="button" to="/productos" v-if="!is_expanded || is_expanded">
+            <i class="pi pi-box material-icons"></i>
+            <span class="text">Productos</span>
+          </router-link> 
+        </el-tooltip>
+      <!-- </div> -->
     </div>
 
 

@@ -84,6 +84,9 @@ import ProgressSpinner from 'primevue/progressspinner';
 // Message
 import Message from 'primevue/message';
 
+// FileUpload
+import FileUpload from 'primevue/fileupload';
+
 
 //
 // FIN PRIME VUE
@@ -188,6 +191,7 @@ createApp(App)
   .component('Skeleton', Skeleton)
   .component('ProgressSpinner', ProgressSpinner)
   .component('Message', Message)
+  .component('FileUpload', FileUpload)
   .use(router)
   .use(ElementPlus, {locale})
   .use(ElMessage)
@@ -198,6 +202,11 @@ createApp(App)
     locale: {
         accept: 'Aceptar',
         reject: 'Rechazar',
+        lt: 'Menor a',
+        lte: 'Menor o igual a',
+        choose: 'Elegir',
+        upload: 'Subir',
+        cancel: 'Cancelar',
         //...
     }})
   .use(ToastService)

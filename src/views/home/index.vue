@@ -23,7 +23,7 @@
 
             <Divider layout="vertical" />
 
-            <Card  class="card-home">
+            <Card class="card-home" @click="$router.replace('/productos')">
               <template #title>
                 <h2 style="text-align: center">Productos</h2>
               </template>
