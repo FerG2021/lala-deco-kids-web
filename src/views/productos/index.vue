@@ -20,9 +20,11 @@
             :value="productos" 
             responsiveLayout="scroll" 
             :loading="loading"
-            :globalFilterFields="['name','lastname','email']"
+            :globalFilterFields="['codeProduct', 'nameProduct']"
             v-model:filters="filters" 
             filterDisplay="menu"
+            style="text-align: center"
+            headerStyle="text-align: center"
           >
             
             <template #header>
@@ -38,33 +40,55 @@
               </div>
             </template>
 
-
-            <Column field="name" header="Nombre">
+            <Column field="name" header="Código">
               <template #body="slotProps">
                 <span>
-                  {{ slotProps.data.name }}
-                </span>
-              </template>
-            </Column>
-
-            <Column header="Image">
-                <template #body="slotProps">
-                  <img :src="slotProps.data.imageURL" :alt="slotProps.data.imageURL" class="product-image"/>
-                </template>
-            </Column>
-
-            <Column field="apellido" header="Apellido">
-              <template #body="slotProps">
-                <span>
-                  {{ slotProps.data.lastname }}
+                  {{ slotProps.data.codeProduct }}
                 </span>
               </template>
             </Column>
             
-            <Column field="username" header="Nombre usuario">
+
+            <Column 
+              header="Imagen"
+            >
+                <template #body="slotProps">
+                  <div style="display: flex">
+                    <div style="margin: auto">
+                      <img v-if="slotProps.data.imageURL != null" :src="slotProps.data.imageURL" :alt="slotProps.data.imageURL" class="product-image"/>
+                    </div>
+                  </div>
+                </template>
+            </Column>
+
+            <Column field="name" header="Nombre">
               <template #body="slotProps">
                 <span>
-                  {{ slotProps.data.email }}
+                  {{ slotProps.data.nameProduct }}
+                </span>
+              </template>
+            </Column>
+
+            <Column field="name" header="Precio de venta">
+              <template #body="slotProps">
+                <span>
+                  $ {{ slotProps.data.priceSaleProduct }}
+                </span>
+              </template>
+            </Column>
+
+            <Column field="name" header="Precio de fiado">
+              <template #body="slotProps">
+                <span>
+                  $ {{ slotProps.data.priceTrustProduct }}
+                </span>
+              </template>
+            </Column>
+
+            <Column field="name" header="Stock">
+              <template #body="slotProps">
+                <span>
+                  {{ slotProps.data.cantStockProduct }}
                 </span>
               </template>
             </Column>
@@ -224,7 +248,26 @@
 
 <style>
   .product-image {
-    width: 50px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+    width: 70px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .headerClass {
+    text-align: center !important;
+  }
+  
+  .p-column-header-content {
+    text-align: center !important;
+    align-content: center !important;
+    /* border: 1px solid red !important; */
+  }
+
+  .p-column-title {
+    /* border: 1px solid green !important; */
+    text-align: center !important;
+    align-content: center !important;
+    
   }
 </style>
