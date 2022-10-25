@@ -5,8 +5,9 @@
     <Dialog
       v-model:visible="display"
       icon="pi pi-refresh"
-      :style="{width: '30%'}"
+      :style="{width: '35%'}"
       class="flex justify-content-center"
+      :draggable="false"
     >
       <template #header icon="pi pi-refresh" style="margin: 0px" class="s">
         <h3 style="margin: 0px"><i class="pi pi-box" style="font-size: 20px"/> Nuevo producto</h3>

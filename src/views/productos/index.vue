@@ -40,7 +40,7 @@
               </div>
             </template>
 
-            <Column field="name" header="Código">
+            <Column field="name" header="Código" style="width: 20px">
               <template #body="slotProps">
                 <span>
                   {{ slotProps.data.codeProduct }}
@@ -51,6 +51,7 @@
 
             <Column 
               header="Imagen"
+              style="width: 20px"
             >
                 <template #body="slotProps">
                   <div style="display: flex">
@@ -72,7 +73,7 @@
             <Column field="name" header="Precio de venta">
               <template #body="slotProps">
                 <span>
-                  $ {{ slotProps.data.priceSaleProduct }}
+                  $ {{ moneda(slotProps.data.priceSaleProduct) }}
                 </span>
               </template>
             </Column>
@@ -80,7 +81,7 @@
             <Column field="name" header="Precio de fiado">
               <template #body="slotProps">
                 <span>
-                  $ {{ slotProps.data.priceTrustProduct }}
+                  $ {{ moneda(slotProps.data.priceTrustProduct) }}
                 </span>
               </template>
             </Column>
@@ -93,14 +94,18 @@
               </template>
             </Column>
 
-            <Column field="editar" header="Editar" headerStyle="width: 3em">
+            <Column field="modificar" header="Modificar" headerStyle="width: 3em">
               <template #body="slotProps">
-                <Button
-                  icon="pi pi-pencil"
-                  class="p-button-rounded p-button-warning mr-2"
-                  @click="$refs.modalModificar.abrir(slotProps.data.id)"
-                  style="margin-right: 5px"
-                />
+                <div style="display: flex">
+                  <div style="margin: auto">
+                    <Button
+                      icon="pi pi-pencil"
+                      class="p-button-rounded p-button-warning mr-2"
+                      @click="$refs.modalModificar.abrir(slotProps.data.id)"
+                      style="margin-right: 5px"
+                    />
+                  </div>
+                </div>
               </template>
             </Column>
 
@@ -241,7 +246,11 @@
               this.obtenerTodos()
             }
           })
-      }
+      },
+
+      moneda(x){
+        return x.toLocaleString('es-AR');
+      },
     },
   }
 </script>

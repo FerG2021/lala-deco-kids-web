@@ -87,6 +87,9 @@ import Message from 'primevue/message';
 // FileUpload
 import FileUpload from 'primevue/fileupload';
 
+// Image
+import Image from 'primevue/image';
+
 
 //
 // FIN PRIME VUE
@@ -192,6 +195,7 @@ createApp(App)
   .component('ProgressSpinner', ProgressSpinner)
   .component('Message', Message)
   .component('FileUpload', FileUpload)
+  .component('Image', Image)
   .use(router)
   .use(ElementPlus, {locale})
   .use(ElMessage)

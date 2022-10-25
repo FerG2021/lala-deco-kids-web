@@ -7,6 +7,7 @@
       icon="pi pi-refresh"
       :style="{width: '30%'}"
       class="flex justify-content-center"
+      :draggable="false"
     >
       <template #header icon="pi pi-refresh" style="margin: 0px" class="s">
         <h3 style="margin: 0px"><i class="pi pi-user-plus" /> Nuevo empleado</h3>
