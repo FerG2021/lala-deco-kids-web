@@ -11,8 +11,8 @@
     >
       <template #header icon="pi pi-refresh" style="margin: 0px" class="s">
         <h3 style="margin: 0px">
-          <i class="pi pi-whatsapp" style="font-size: 20px" /> 
-          Enviar comprobante por WhatsApp
+          <i class="pi pi-google" style="font-size: 20px" /> 
+          Enviar comprobante por Mail
         </h3>
       </template>
 
@@ -25,15 +25,15 @@
       <div v-else>
         <div class="field">
           <div class="p-float-label">
-            <span>Teléfono asociado al cliente (Si no es correcto modificar)</span>
-            <InputNumber 
-              id="telefonoAsociado"
-              v-model="form.telefonoAsociado"
+            <span>Mail asociado al cliente (Si no es correcto modificar)</span>
+            <InputText 
+              id="mailAsociado"
+              v-model="form.mailAsociado"
               style="width: 100%"
               mode="decimal" 
               :useGrouping="false"
             />
-            <label for="telefonoAsociado">Teléfono asociado</label>
+            <label for="mailAsociado">Teléfono asociado</label>
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@
 
       <template #footer>
         <Button
-          label="Enviar WhatsApp"
+          label="Enviar mail"
           type="submit"
           icon="pi pi-check"
           autofocus
@@ -70,7 +70,7 @@ export default {
       loadingBtnGuardar: false,
 
       form: {
-        telefonoAsociado: null,
+        mailAsociado: null,
       },
 
       id: null,
@@ -156,7 +156,7 @@ export default {
 
     async getDatos() {
       await this.axios
-        .get("/api/cuentacorriente/datosWhatsApp/" + this.id)
+        .get("/api/venta/datosWhatsApp/" + this.id)
         .then((response) => {
           if (response.data.code == 200) {
             console.log("response");
@@ -164,7 +164,7 @@ export default {
             // this.loadingBtnPDF = false
 
             // window.open(response.data.data, '_blank')
-            this.form.telefonoAsociado = response.data.data.datosClient.phoneClient
+            this.form.mailAsociado = response.data.data.datosClient.mailClient
 
             this.datos = response.data.data
             console.log("this.datos");
@@ -232,35 +232,40 @@ export default {
 
     resetForm() {
       this.datos = null
-      this.form.telefonoAsociado = null
+      this.form.mailAsociado = null
     },
 
     async guardar() {
       this.loadingBtnGuardar = true;
 
-      let mensaje = `
-        ¡Hola ${this.datos.datosClient.nameClient}, te saluda el equipo de Lala Deco Kids!"`
+      let params = {
+        id: this.id,
+        mailCliente: this.form.mailAsociado,
+      }
 
-      mensaje = mensaje + "\n"
+      await this.axios
+        .post("/api/venta/enviarMail", params)
+        .then((response) => {
+          console.log("response");
+          console.log(response);
 
-      mensaje = mensaje + " Te adjuntamos el comprobante de los movimientos tu cuenta corriente, para visualizarlo presioná en el siguiente enlace: ";
+          if (response.data.code == 200) {
+            this.$toast.add({
+              severity: "success",
+              summary: "Confirmación de envío",
+              detail: "Mail enviado con éxito",
+              life: 3000,
+            });
+          }
 
-      mensaje = mensaje + "\n"
+          // this.loadingBtnPDF = false
 
-      mensaje = mensaje + this.datos.urlEnviar
-
-      mensaje = mensaje + "\n"
-
-      mensaje = mensaje + "¡¡¡Muchas gracias por elegirnos!!!"
-
-
-      let url = encodeURI(
-        "https://wa.me/" + this.form.telefonoAsociado.toString() + "?text=" + mensaje
-      );
-
-      window.open(url, "_blank");
+          // window.open(response.data, '_blank')
+        })
 
       this.loadingBtnGuardar = false;
+
+      this.display = false
     },
 
     formatearFecha(fecha) {

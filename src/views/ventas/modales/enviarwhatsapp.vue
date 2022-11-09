@@ -58,6 +58,9 @@ import { email, required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
 import { helpers } from "@vuelidate/validators";
 
+
+
+
 export default {
   setup: () => ({ v$: useVuelidate() }),
 
@@ -156,7 +159,7 @@ export default {
 
     async getDatos() {
       await this.axios
-        .get("/api/cuentacorriente/datosWhatsApp/" + this.id)
+        .get("/api/venta/datosWhatsApp/" + this.id)
         .then((response) => {
           if (response.data.code == 200) {
             console.log("response");
@@ -243,7 +246,7 @@ export default {
 
       mensaje = mensaje + "\n"
 
-      mensaje = mensaje + " Te adjuntamos el comprobante de los movimientos tu cuenta corriente, para visualizarlo presioná en el siguiente enlace: ";
+      mensaje = mensaje + " Te adjuntamos el comprobante de tu compra, para visualizarlo presioná en el siguiente enlace: ";
 
       mensaje = mensaje + "\n"
 

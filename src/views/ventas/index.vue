@@ -146,7 +146,7 @@
               </template>
             </Column>
 
-            <Column field="acciones" header="Acciones" headerStyle="width: 10em" style="min-width:3rem">
+            <Column field="acciones" header="Acciones" headerStyle="width: 10em" style="min-width:14rem">
               <template #body="slotProps">
                 <div style="display: flex">
                   <div style="margin: auto">
@@ -165,8 +165,8 @@
                       />
                     </el-tooltip>
 
-                     <!-- Generar PDF -->
-                    <!-- <el-tooltip
+                    <!-- Generar PDF -->
+                    <el-tooltip
                       class="box-item"
                       effect="dark"
                       content="Generar PDF"
@@ -179,10 +179,10 @@
                         style="margin-right: 5px"
                         :loading="loadingBtnPDF"
                       />
-                    </el-tooltip> -->
+                    </el-tooltip>
 
                     <!-- Enviar por WhatsApp -->
-                    <!-- <el-tooltip
+                    <el-tooltip
                       class="box-item"
                       effect="dark"
                       content="Enviar por WhatsApp"
@@ -194,10 +194,10 @@
                         @click="$refs.modalEnviarWhatsApp.abrir(slotProps.data.id)" 
                         style="margin-right: 5px"
                       />
-                    </el-tooltip> -->
+                    </el-tooltip>
 
                     <!-- Enviar por mail -->
-                    <!-- <el-tooltip
+                    <el-tooltip
                       class="box-item"
                       effect="dark"
                       content="Enviar por mail"
@@ -209,8 +209,7 @@
                         @click="$refs.modalEnviarMail.abrir(slotProps.data.id)" 
                         style="margin-right: 5px"
                       />
-                    </el-tooltip> -->
-
+                    </el-tooltip>
                   </div>
                 </div>
               </template>
@@ -285,6 +284,14 @@
   <modal-detalle
     ref="modalDetalle"
   ></modal-detalle>
+
+  <modal-enviar-whats-app
+    ref="modalEnviarWhatsApp"
+  ></modal-enviar-whats-app>
+
+  <modal-enviar-mail
+    ref="modalEnviarMail"
+  ></modal-enviar-mail>
   
   <modal-modificar 
     ref="modalModificar"
@@ -308,6 +315,8 @@
   import ModalDetalle from './modales/detalle.vue'
   import ModalModificar from './modales/modificar.vue'
   import ModalEliminar from './modales/eliminar.vue'
+  import ModalEnviarWhatsApp from "./modales/enviarwhatsapp.vue";
+  import ModalEnviarMail from "./modales/enviarmail.vue";
 
   
 
@@ -315,6 +324,8 @@
     components: {
       ModalNuevo,
       ModalDetalle,
+      ModalEnviarWhatsApp,
+      ModalEnviarMail,
       ModalModificar,
       ModalEliminar,
     },
@@ -406,15 +417,18 @@
         });
       },
 
-      async eliminarUsuario(row){
-        console.log("entra");
-        await this.axios.delete("/api/producto/eliminar/" + row.data.id)
-          .then(response => {
-            if (response.data.code == 200) {
-              this.$toast.add({severity:'success', summary:'Mensaje de confirmación', detail:'Producto eliminado con éxito', life: 3000});
-              this.obtenerTodos()
-            }
-          })
+      async generarPDF(id){
+        await this.axios
+        .get("/api/venta/exportarPDF/" + id)
+        .then((response) => {
+          if (response.data.code == 200) {
+            console.log("response");
+            console.log(response);
+            // this.loadingBtnPDF = false
+
+            window.open(response.data.data, '_blank')
+          } else {}
+        })
       },
 
       moneda(x){

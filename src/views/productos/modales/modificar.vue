@@ -72,12 +72,13 @@
           <!-- Porc de fiado -->
           <div class="field">
             <div class="p-float-label">
-              <InputNumber 
+              <InputText
                 id="procPrecioFiado"
                 v-model="form.procPrecioFiado"
                 style="width: 100%"
                 suffix=" %"
                 :class="{'p-invalid':v$.procPrecioFiado.$invalid && submitted}"
+                @change="actualizarPrecioFiado()"
               />
               <label for="procPrecioFiado" :class="{'p-error':v$.procPrecioFiado.$invalid && submitted}">Porcentaje precio de fiado</label>
             </div>
@@ -270,6 +271,8 @@ export default {
       this.display = false;
     },
 
+    
+
 
     async getDatos(){
       console.log("abrir");
@@ -293,7 +296,11 @@ export default {
           })
     },
 
+    actualizarPrecioFiado(){
+      let porc = parseFloat(this.form.procPrecioFiado) / 100
 
+      this.form.precioFiado = (parseFloat(this.form.precioVenta) * parseFloat(porc)) + parseFloat(this.form.precioVenta)
+    },
 
     onUpload() {
         this.$toast.add({severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000});
