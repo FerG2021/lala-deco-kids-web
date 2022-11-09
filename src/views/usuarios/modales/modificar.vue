@@ -231,10 +231,10 @@ export default {
       await this.axios.get("/api/usuario/obtenerDatos/" + this.id)
           .then(response => {
             if (response.data.code == 200) {
-              this.datos = response.data.data
               this.form.nombre = response.data.data.nombre
               this.form.apellido = response.data.data.apellido
               this.form.email = response.data.data.email
+              this.datos = response.data.data
             } 
           })
     },

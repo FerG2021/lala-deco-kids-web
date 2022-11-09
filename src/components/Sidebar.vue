@@ -69,7 +69,7 @@
         <el-tooltip
           class="box-item"
           effect="dark"
-          content="Usuarios"
+          content="Productos"
           placement="right-start"
           v-if="!is_expanded"
         >
@@ -79,6 +79,70 @@
           </router-link> 
         </el-tooltip>
       <!-- </div> -->
+
+
+      <!--  -->
+      <!-- Codigo de barras -->
+      <!--  -->
+      <!-- <router-link class="button" to="/codigobarras" v-if="is_expanded">
+          <i class="pi pi-qrcode material-icons"></i>
+          <span class="text">Código de barras</span>
+        </router-link>   
+
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="Código de barras"
+          placement="right-start"
+          v-if="!is_expanded"
+        >
+          <router-link class="button" to="/codigobarras" v-if="!is_expanded || is_expanded">
+            <i class="pi pi-qrcode material-icons"></i>
+            <span class="text"></span>
+          </router-link> 
+        </el-tooltip> -->
+
+      <!--  -->
+      <!-- VENTAS -->
+      <!--  -->
+      <router-link class="button" to="/ventas" v-if="is_expanded">
+          <i class="pi pi-shopping-cart material-icons"></i>
+          <span class="text">Ventas</span>
+        </router-link>   
+
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="Ventas"
+          placement="right-start"
+          v-if="!is_expanded"
+        >
+          <router-link class="button" to="/ventas" v-if="!is_expanded || is_expanded">
+            <i class="pi pi-shopping-cart material-icons"></i>
+            <span class="text">Ventas</span>
+          </router-link> 
+        </el-tooltip>
+
+       <!--  -->
+      <!-- VENTAS -->
+      <!--  -->
+      <router-link class="button" to="/cuentacorriente" v-if="is_expanded">
+          <i class="pi pi-wallet material-icons"></i>
+          <span class="text">Cuentas corrientes</span>
+        </router-link>   
+
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="Cuentas corrientes"
+          placement="right-start"
+          v-if="!is_expanded"
+        >
+          <router-link class="button" to="/cuentacorriente" v-if="!is_expanded || is_expanded">
+            <i class="pi pi-wallet material-icons"></i>
+            <span class="text">Cuentas</span>
+          </router-link> 
+        </el-tooltip>
     </div>
 
 

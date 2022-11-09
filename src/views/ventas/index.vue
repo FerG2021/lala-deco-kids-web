@@ -2,7 +2,7 @@
   <main class="about-page">
     <Card>
       <template #header>
-        <h1 style="margin-top: 15px; margin-left: 15px">Productos</h1>
+        <h1 style="margin-top: 15px; margin-left: 15px">Ventas</h1>
       </template>
 
       <template #content>
@@ -35,14 +35,14 @@
 
             <template #end>
                 <Button 
-                  label="Nuevo producto" 
+                  label="Nueva venta" 
                   @click="$refs.modalNuevo.abrir()"
                 />
             </template>
           </Toolbar>
 
           <DataTable 
-            :value="productos" 
+            :value="ventas" 
             responsiveLayout="scroll" 
             :paginator="true" 
             class="p-datatable-customers" 
@@ -54,7 +54,7 @@
             style="text-align: center"
             headerStyle="text-align: center"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[10,25,50]"
-            currentPageReportTemplate="Mostrando {first} de {last} de un total de {totalRecords} productos"
+            currentPageReportTemplate="Mostrando {first} de {last} de un total de {totalRecords} ventas"
           >
             
             <template #header>
@@ -72,7 +72,7 @@
             <template #empty>
               <div style="display: flex">
                 <div style="margin: auto">
-                  No se encontraron productos
+                  No se encontraron ventas
                 </div>
               </div> 
             </template>
@@ -80,29 +80,27 @@
             <template #loading>
               <div style="display: flex">
                 <div style="margin: auto">
-                  Cargando productos, por favor espere
+                  Cargando ventas, por favor espere
                 </div>
               </div>
             </template>
 
-            <Column field="name" header="Código" style="width: 20px">
+            <!-- <Column field="name" header="Código" style="width: 20px">
               <template #body="slotProps">
                 <span>
                   {{ slotProps.data.codeProduct }}
                 </span>
               </template>
-            </Column>
+            </Column> -->
             
 
-            <Column 
+            <!-- <Column 
               header="Imagen"
               style="width: 20px"
             >
                 <template #body="slotProps">
                   <div style="display: flex">
                     <div style="margin: auto">
-                      <!-- <img v-if="slotProps.data.imageURL != null" :src="slotProps.data.imageURL" :alt="slotProps.data.imageURL" class="product-image"/> -->
-
                       <Image 
                         preview 
                         :src="slotProps.data.imageURL" 
@@ -114,33 +112,111 @@
                     </div>
                   </div>
                 </template>
-            </Column>
+            </Column> -->
 
-            <Column field="name" header="Nombre">
+            <Column field="id" header="Nro venta">
               <template #body="slotProps">
                 <span>
-                  {{ slotProps.data.nameProduct }}
+                  {{ slotProps.data.id }}
                 </span>
               </template>
             </Column>
 
-            <Column field="name" header="Precio de venta">
+            <Column field="nameBuyer" header="Nombre cliente">
               <template #body="slotProps">
                 <span>
-                  $ {{ moneda(slotProps.data.priceSaleProduct) }}
+                  {{ slotProps.data.nameBuyer }}
                 </span>
               </template>
             </Column>
 
-            <Column field="name" header="Precio de fiado">
+            <Column field="nameSeller" header="Nombre vendedor">
               <template #body="slotProps">
                 <span>
-                  $ {{ moneda(slotProps.data.priceTrustProduct) }}
+                  {{ slotProps.data.nameSeller }}
                 </span>
               </template>
             </Column>
 
-            <Column field="name" header="Stock">
+            <Column field="totalPrice" header="Precio total">
+              <template #body="slotProps">
+                <span>
+                  $ {{ moneda(slotProps.data.totalPrice) }}
+                </span>
+              </template>
+            </Column>
+
+            <Column field="acciones" header="Acciones" headerStyle="width: 10em" style="min-width:3rem">
+              <template #body="slotProps">
+                <div style="display: flex">
+                  <div style="margin: auto">
+                    <!-- Detalle -->
+                    <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      content="Detalles"
+                      placement="top-start"
+                    >
+                      <Button
+                        icon="pi pi-eye"
+                        class="p-button-rounded p-button-primary mr-2"
+                        @click="$refs.modalDetalle.abrir(slotProps.data.id)"
+                        style="margin-right: 5px"
+                      />
+                    </el-tooltip>
+
+                     <!-- Generar PDF -->
+                    <!-- <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      content="Generar PDF"
+                      placement="top-start"
+                    >
+                      <Button 
+                        icon="pi pi-file-pdf" 
+                        class="p-button-rounded p-button-danger" 
+                        @click="generarPDF(slotProps.data.id)" 
+                        style="margin-right: 5px"
+                        :loading="loadingBtnPDF"
+                      />
+                    </el-tooltip> -->
+
+                    <!-- Enviar por WhatsApp -->
+                    <!-- <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      content="Enviar por WhatsApp"
+                      placement="top-start"
+                    >
+                      <Button 
+                        icon="pi pi-whatsapp" 
+                        class="p-button-rounded p-button-success" 
+                        @click="$refs.modalEnviarWhatsApp.abrir(slotProps.data.id)" 
+                        style="margin-right: 5px"
+                      />
+                    </el-tooltip> -->
+
+                    <!-- Enviar por mail -->
+                    <!-- <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      content="Enviar por mail"
+                      placement="top-start"
+                    >
+                      <Button 
+                        icon="pi pi-google" 
+                        class="p-button-rounded p-button-primary" 
+                        @click="$refs.modalEnviarMail.abrir(slotProps.data.id)" 
+                        style="margin-right: 5px"
+                      />
+                    </el-tooltip> -->
+
+                  </div>
+                </div>
+              </template>
+            </Column>
+
+            <!-- <Column field="name" header="Stock">
               <template #body="slotProps">
                 <span>
                   {{ slotProps.data.cantStockProduct }}
@@ -191,7 +267,7 @@
                   </div>
                 </div>
               </template>
-            </Column>
+            </Column> -->
 
           </DataTable>
         </div>
@@ -203,8 +279,12 @@
 
   <modal-nuevo 
     ref="modalNuevo"
-    @actualizarTabla="obtenerTodos"
+    @actualizarTabla="obtenerTodos()"
   ></modal-nuevo>
+
+  <modal-detalle
+    ref="modalDetalle"
+  ></modal-detalle>
   
   <modal-modificar 
     ref="modalModificar"
@@ -225,6 +305,7 @@
   import { FilterMatchMode, FilterOperator } from "primevue/api";
 
   import ModalNuevo from './modales/nuevo.vue'
+  import ModalDetalle from './modales/detalle.vue'
   import ModalModificar from './modales/modificar.vue'
   import ModalEliminar from './modales/eliminar.vue'
 
@@ -233,13 +314,14 @@
   export default {
     components: {
       ModalNuevo,
+      ModalDetalle,
       ModalModificar,
       ModalEliminar,
     },
 
     data() {
       return {
-        productos: [],
+        ventas: [],
         loading: false,
         filters: {
           'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
@@ -272,16 +354,16 @@
       async obtenerTodos(){
         this.usuarios = []
         this.loading = true
-        await this.axios.get("/api/producto/obtenerTodos")
+        await this.axios.get("/api/venta/obtenerTodos")
           .then(response => {
             if (response.data.code == 200) {
               console.log("response.data");
               console.log(response.data);
 
-              this.productos = response.data.data
-              
+              this.ventas = response.data.data
+              console.log("this.ventas");
+              console.log(this.ventas);
             }
-
         })
 
         this.loading = false

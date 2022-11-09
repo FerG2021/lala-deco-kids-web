@@ -19,7 +19,18 @@ const router = createRouter({
             path: '/productos',
             component: () => import('../views/productos/index.vue')
         },
-       
+        {
+            path: '/codigobarras',
+            component: () => import('../views/codigobarras/index.vue')
+        },
+        {
+            path: '/ventas',
+            component: () => import('../views/ventas/index.vue')
+        },
+        {
+            path: '/cuentacorriente',
+            component: () => import('../views/cuentacorriente/index.vue')
+        },
         
         {
             path: '/mi-cuenta',

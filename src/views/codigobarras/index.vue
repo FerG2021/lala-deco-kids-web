@@ -2,45 +2,20 @@
   <main class="about-page">
     <Card>
       <template #header>
-        <h1 style="margin-top: 15px; margin-left: 15px">Productos</h1>
+        <h1 style="margin-top: 15px; margin-left: 15px">Códigos de barras</h1>
       </template>
 
       <template #content>
-        <!-- <div style="display: flex">
+        <div style="display: flex">
           <div style="margin-left: auto">
             <Button 
-              label="Nuevo producto" 
+              label="Nuevo código de barras" 
               @click="$refs.modalNuevo.abrir()"/>
           </div>
-        </div> -->
+        </div>
 
 
         <div style="margin-top: 10px">
-          <Toolbar class="mb-4">
-            <template #start>
-              <Button 
-                label="Excel" 
-                icon="pi pi-file-excel" 
-                class="p-button-success mr-2" 
-                @click="exportCSV($event)"
-              />
-                
-              <Button 
-                label="PDF" 
-                icon="pi pi-file-pdf" 
-                class="p-button-danger" 
-                @click="exportPDF($event)"
-              />
-            </template>
-
-            <template #end>
-                <Button 
-                  label="Nuevo producto" 
-                  @click="$refs.modalNuevo.abrir()"
-                />
-            </template>
-          </Toolbar>
-
           <DataTable 
             :value="productos" 
             responsiveLayout="scroll" 
@@ -58,17 +33,17 @@
           >
             
             <template #header>
-              <div style="display: flex">
+              <div class="display: flex">
                 <!-- <h5 class="m-0">Customers</h5> -->
-                <div style="margin-left: 0px">
+                <div class="margin-left: auto">
                   <span class="p-input-icon-left">
                     <i class="pi pi-search" />
                     <InputText v-model="filters['global'].value" placeholder="Escriba para buscar" />
                   </span>
                 </div>
+                
               </div>
             </template>
-            
             <template #empty>
               <div style="display: flex">
                 <div style="margin: auto">
@@ -76,7 +51,6 @@
                 </div>
               </div> 
             </template>
-            
             <template #loading>
               <div style="display: flex">
                 <div style="margin: auto">
@@ -256,19 +230,6 @@
     },
 
     methods: {
-      async exportPDF(event){
-        console.log("event");
-        console.log(event);
-
-        await this.axios.get("/api/producto/exportarPDF")
-          .then(response => {
-            if (response.data.code == 200) {
-              console.log("response.data");
-              console.log(response.data);
-            }
-          })
-      },
-
       async obtenerTodos(){
         this.usuarios = []
         this.loading = true
@@ -336,8 +297,7 @@
       },
 
       moneda(x){
-        let aux = parseFloat(x)
-        return aux.toLocaleString('es-AR');
+        return x.toLocaleString('es-AR');
       },
     },
   }
