@@ -123,26 +123,48 @@
           </router-link> 
         </el-tooltip>
 
-       <!--  -->
-      <!-- VENTAS -->
+      <!--  -->
+      <!-- CUENTAS CORRIENTES -->
       <!--  -->
       <router-link class="button" to="/cuentacorriente" v-if="is_expanded">
-          <i class="pi pi-wallet material-icons"></i>
-          <span class="text">Cuentas corrientes</span>
-        </router-link>   
+        <i class="pi pi-wallet material-icons"></i>
+        <span class="text">Cuentas corrientes</span>
+      </router-link>   
 
-        <el-tooltip
-          class="box-item"
-          effect="dark"
-          content="Cuentas corrientes"
-          placement="right-start"
-          v-if="!is_expanded"
-        >
-          <router-link class="button" to="/cuentacorriente" v-if="!is_expanded || is_expanded">
-            <i class="pi pi-wallet material-icons"></i>
-            <span class="text">Cuentas</span>
-          </router-link> 
-        </el-tooltip>
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="Cuentas corrientes"
+        placement="right-start"
+        v-if="!is_expanded"
+      >
+        <router-link class="button" to="/cuentacorriente" v-if="!is_expanded || is_expanded">
+          <i class="pi pi-wallet material-icons"></i>
+          <span class="text">Cuentas</span>
+        </router-link> 
+      </el-tooltip>
+
+
+      <!--  -->
+      <!-- CLIENTES -->
+      <!--  -->
+      <router-link class="button" to="/clientes" v-if="is_expanded">
+        <i class="pi pi-users material-icons"></i>
+        <span class="text">Clientes</span>
+      </router-link>   
+
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="Clientes"
+        placement="right-start"
+        v-if="!is_expanded"
+      >
+        <router-link class="button" to="/clientes" v-if="!is_expanded || is_expanded">
+          <i class="pi pi-users material-icons"></i>
+          <span class="text">Clientes</span>
+        </router-link> 
+      </el-tooltip>
     </div>
 
 

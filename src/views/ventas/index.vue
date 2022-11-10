@@ -17,7 +17,7 @@
 
         <div style="margin-top: 10px">
           <Toolbar class="mb-4">
-            <template #start>
+            <!-- <template #start>
               <Button 
                 label="Excel" 
                 icon="pi pi-file-excel" 
@@ -31,7 +31,7 @@
                 class="p-button-danger" 
                 @click="exportPDF($event)"
               />
-            </template>
+            </template> -->
 
             <template #end>
                 <Button 

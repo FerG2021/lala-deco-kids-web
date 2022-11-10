@@ -178,6 +178,7 @@
               </div>
             </div>
 
+            {{ arrayProductosVenta.length }}
             <div>
               <DataTable :value="arrayProductosVenta" responsiveLayout="scroll">
                 <Column field="nombre" header="Nombre">
@@ -607,91 +608,102 @@ export default {
     },
 
     async guardar() {
-      this.loadingBtnGuardar = true;
+      if (this.arrayProductosVenta.length > 0) {
+        this.loadingBtnGuardar = true;
 
-      let anio = this.form.fechaVenta.getFullYear();
-      let mes = this.form.fechaVenta.getMonth()+1;
-      let dia = this.form.fechaVenta.getDate()
+        let anio = this.form.fechaVenta.getFullYear();
+        let mes = this.form.fechaVenta.getMonth()+1;
+        let dia = this.form.fechaVenta.getDate()
 
-      console.log("dia, mes, anio");
-      console.log(anio + "-" + mes + "-" + dia);
-
-
-      let params = {
-        fechaVenta: anio + "-" + mes + "-" + dia,
-        tipoCliente: this.form.tipoCliente,
-        arrayProductosVenta: JSON.stringify(this.arrayProductosVenta),
-        // precioTotal: this.precioTotal,
-        precioTotal: this.precioTotal
-      }
-
-      if (this.tipoCliente == 2 && this.form.nombreCliente != null) {
-        params.clienteVenta = tis.form.nombreCliente.id
-      }
-
-      params.nombreVendedor = this.$store.state.user.name + " " + this.$store.state.user.lastname
-
-      if (this.form.tipoCliente == 0) {
-        params.idCliente = 0
-        params.nombreCliente = "Consumidor final"        
-      } else {
-        params.idCliente = this.form.nombreCliente.id
-        params.nombreCliente = this.form.nombreCliente.completName
-        params.nameClient = this.form.nombreCliente.nameClient
-        params.lastNameClient = this.form.nombreCliente.lastNameClient
-        params.dniClient = this.form.nombreCliente.dniClient
-        params.montoPagado = this.form.montoPagado
-      }
-
-      console.log("this.store.state.user");
-      console.log(this.$store.state.user);
-
-      console.log("anio");
-      console.log(this.form.fechaVenta.getFullYear());
+        console.log("dia, mes, anio");
+        console.log(anio + "-" + mes + "-" + dia);
 
 
-      console.log("this.form.nombreCliente");
-      console.log(this.form.nombreCliente);
+        let params = {
+          fechaVenta: anio + "-" + mes + "-" + dia,
+          tipoCliente: this.form.tipoCliente,
+          arrayProductosVenta: JSON.stringify(this.arrayProductosVenta),
+          // precioTotal: this.precioTotal,
+          precioTotal: this.precioTotal
+        }
+
+        if (this.tipoCliente == 2 && this.form.nombreCliente != null) {
+          params.clienteVenta = tis.form.nombreCliente.id
+        }
+
+        params.nombreVendedor = this.$store.state.user.name + " " + this.$store.state.user.lastname
+
+        if (this.form.tipoCliente == 0) {
+          params.idCliente = 0
+          params.nombreCliente = "Consumidor final"        
+        } else {
+          params.idCliente = this.form.nombreCliente.id
+          params.nombreCliente = this.form.nombreCliente.completName
+          params.nameClient = this.form.nombreCliente.nameClient
+          params.lastNameClient = this.form.nombreCliente.lastNameClient
+          params.dniClient = this.form.nombreCliente.dniClient
+          params.montoPagado = this.form.montoPagado
+        }
+
+        console.log("this.store.state.user");
+        console.log(this.$store.state.user);
+
+        console.log("anio");
+        console.log(this.form.fechaVenta.getFullYear());
 
 
-      console.log("params");
-      console.log(params);
+        console.log("this.form.nombreCliente");
+        console.log(this.form.nombreCliente);
+
+
+        console.log("params");
+        console.log(params);
 
 
 
-      await this.axios.post("/api/venta/crear", params)
-        .then(response => {
-          console.log("response");
-          console.log(response);
-          if (response.data.code == 200) {
-            console.log("response.data");
-            console.log(response.data);
+        await this.axios.post("/api/venta/crear", params)
+          .then(response => {
+            console.log("response");
+            console.log(response);
+            if (response.data.code == 200) {
+              console.log("response.data");
+              console.log(response.data);
 
-            this.$toast.add({
-              severity: "success",
-              summary: "Mensaje de confirmación",
-              detail: response.data.data,
-              life: 3000,
-            });
-            this.$emit('actualizar-tabla');
-            this.display = false;
-
-          } else {
-            console.log("response.data");
-            console.log(response.data);
-            for (const property in response.data.data) {
-              // console.log(`${property}: ${response.data.data[property]}`);
               this.$toast.add({
-                severity: "error",
-                summary: "Se ha producido un error",
-                detail: `${response.data.data[property]}`,
-                life: 5000,
+                severity: "success",
+                summary: "Mensaje de confirmación",
+                detail: response.data.data,
+                life: 3000,
               });
+              this.$emit('actualizar-tabla');
+              this.display = false;
+
+            } else {
+              console.log("response.data");
+              console.log(response.data);
+              for (const property in response.data.data) {
+                // console.log(`${property}: ${response.data.data[property]}`);
+                this.$toast.add({
+                  severity: "error",
+                  summary: "Se ha producido un error",
+                  detail: `${response.data.data[property]}`,
+                  life: 5000,
+                });
+              }
             }
-          }
-        })
-        
-      this.loadingBtnGuardar = false;
+          })
+          
+        this.loadingBtnGuardar = false;
+      } else {
+        this.$toast.add({
+          severity: "error",
+          summary: "Se ha producido un error",
+          detail: "Se debe seleccionar al menos un producto para la venta",
+          life: 5000,
+        });
+      }
+
+      
     },
 
     onUpload() {

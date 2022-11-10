@@ -11,11 +11,11 @@
     >
       <template #header icon="pi pi-refresh" style="margin: 0px" class="s">
         <h3 style="margin: 0px">
-          <i class="pi pi-eye" style="font-size: 20px" /> Detalle de la cuenta corriente
+          <i class="pi pi-eye" style="font-size: 20px" /> Detalle del cliente
         </h3>
       </template>
 
-      <div style="display: flex">
+      <!-- <div style="display: flex">
         <div style="margin-left: auto">
           <Button 
             label="Generar PDF" 
@@ -25,8 +25,7 @@
             :loading="loadingBtnPDF"
           />
         </div>
-        
-      </div>
+      </div> -->
 
       <div style="display: flex" v-if="datos == null">
         <div style="margin: auto">
@@ -36,74 +35,55 @@
 
       <div style="margin-top: 5px; width: 100%" v-if="datos != null">
         <div class="p-fluid grid formgrid">
-          <!-- <div class="field col-12 md:col-3">
-            <label for="nombreVendedor">Vendedor</label>
-            <InputText 
-              inputId="nombreVendedor" 
-              v-model="nombreVendedor" 
-              disabled
-            />
-          </div> -->
-
           <div class="field col-12 md:col-4">
-            <label for="nombreComprador">Comprador</label>
+            <label for="apellido">Apellido</label>
             <InputText 
-              inputId="nombreComprador" 
-              v-model="nombreComprador" 
+              inputId="apellido" 
+              v-model="apellido" 
               disabled
             />
           </div>
 
           <div class="field col-12 md:col-4">
-            <label for="tipoVenta">DNI</label>
+            <label for="nombre">Nombre</label>
             <InputText 
-              inputId="dniComprador" 
-              v-model="dniComprador" 
+              inputId="nombre" 
+              v-model="nombre" 
               disabled
             />
           </div>
 
           <div class="field col-12 md:col-4">
-            <label for="fechaUltimaAccion">Fecha última acción</label>
+            <label for="dni">DNI</label>
             <InputText 
-              inputId="fechaUltimaAccion" 
-              v-model="fechaUltimaAccion" 
+              inputId="dni" 
+              v-model="dni" 
+              disabled
+            />
+          </div>
+
+          
+        </div>
+
+        <div class="p-fluid grid formgrid">
+          <div class="field col-12 md:col-6">
+            <label for="telefono">Teléfono</label>
+            <InputText 
+              inputId="telefono" 
+              v-model="telefono" 
+              disabled
+            />
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <label for="mail">Mail</label>
+            <InputText 
+              inputId="mail" 
+              v-model="mail" 
               disabled
             />
           </div>
         </div>
-
-        <!-- productos de la venta -->
-        <DataTable :value="detalleCuentaCorriente" responsiveLayout="scroll">
-          <!-- <Column field="code" header="Code"></Column> -->
-          <Column field="date" header="Fecha">
-            <template #body="slotProps">
-              {{ formatearFecha(slotProps.data.date) }}
-            </template>
-          </Column>
-          
-          <Column field="sale" header="Venta">
-            <template #body="slotProps">
-              <span>
-                $ {{ moneda(slotProps.data.sale) }}
-              </span>
-            </template>
-          </Column>
-
-          <Column field="pay" header="Entregado" style="width:2rem">
-            <template #body="slotProps">
-              $ {{ moneda(slotProps.data.pay) }}
-            </template>
-          </Column>
-
-            <template #footer>
-                <div style="margin-right: 0px">
-                  Total: $ {{ moneda(datos.datosCuentaCorriente.balance) }}
-                </div>
-            </template>
-
-          </DataTable>
-
       </div>
 
 
@@ -138,12 +118,12 @@ export default {
 
       id: null,
       datos: null,
-      nombreComprador: null,
-      nombreVendedor: null,
-      fechaUltimaAccion: null,
-      dniComprador: null,
-      detalleCuentaCorriente: [],
-      loadingBtnPDF: false,
+      apellido: null,
+      nombre: null,
+      mail: null,
+      telefono: null,
+      dni: null,
+      direccion: null,
     };
   },
 
@@ -220,26 +200,19 @@ export default {
     async getDatos() {
       console.log("abrir");
       await this.axios
-        .get("/api/cuentacorriente/obtenerDatos/" + this.id)
+        .get("/api/cliente/obtenerDatos/" + this.id)
         .then((response) => {
           if (response.data.code == 200) {
-            
-            this.detalleCuentaCorriente = response.data.data.datosCuentaCorrienteProducto
-            console.log("this.detalleCuentaCorriente");
-            console.log(this.detalleCuentaCorriente);
+            console.log("response");
+            console.log(response.data.data);
 
-            this.nombreComprador = response.data.data.datosCuentaCorriente.lastNameClient + ", "  + response.data.data.datosCuentaCorriente.nameClient
-
-            this.dniComprador = response.data.data.datosCuentaCorriente.dniClient
-
-            let auxFecha = this.formatearFecha(response.data.data.datosCuentaCorriente.datelastaction)
-            this.fechaUltimaAccion = auxFecha
-
+            this.apellido = response.data.data.lastNameClient
+            this.nombre = response.data.data.nameClient
+            this.mail = response.data.data.mailClient
+            this.telefono = response.data.data.phoneClient
+            this.dni = response.data.data.dniClient
+            this.direccion = response.data.data.directionClient
             this.datos = response.data.data;
-            console.log("this.datos");
-            console.log(this.datos);
-
-            
           }
         });
     },
@@ -247,7 +220,7 @@ export default {
     async exportarPDF(){
       this.loadingBtnPDF = true
       await this.axios
-        .get("/api/cuentacorriente/exportarPDF/" + this.id)
+        .get("/api/venta/exportarPDF/" + this.id)
         .then((response) => {
           console.log("response");
           console.log(response);
@@ -315,10 +288,10 @@ export default {
       this.datos = null
       this.nombreComprador = null
       this.nombreVendedor = null
-      this.fechaUltimaAccion = null
-      this.dniComprador = null
-      this.detalleCuentaCorriente = []
-      this.loadingBtnPDF = false
+      this.fechaVenta = null
+      this.tipoVenta = null
+      this.productos = []
+      this.datos = null;
     },
 
     async guardar() {
@@ -390,13 +363,6 @@ export default {
         });
 
       this.loadingBtnGuardar = false;
-    },
-
-    formatearFecha(fecha) {
-      let fecha1 = new Date(fecha);
-      // let fecha2 = fecha1.toLocaleString();
-      let fecha2 = fecha1.toLocaleDateString();
-      return fecha2;
     },
 
     moneda(x) {

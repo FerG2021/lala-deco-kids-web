@@ -15,7 +15,7 @@
         </div> -->
 
         <div style="margin-top: 10px">
-          <Toolbar class="mb-4">
+          <!-- <Toolbar class="mb-4">
             <template #start>
               <Button
                 label="Excel"
@@ -32,10 +32,10 @@
               />
             </template>
 
-            <!-- <template #end>
+            <template #end>
               <Button label="Nueva venta" @click="$refs.modalNuevo.abrir()" />
-            </template> -->
-          </Toolbar>
+            </template>
+          </Toolbar> -->
 
           <DataTable
             :value="cuentascorrientes"

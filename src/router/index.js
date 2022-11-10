@@ -31,6 +31,10 @@ const router = createRouter({
             path: '/cuentacorriente',
             component: () => import('../views/cuentacorriente/index.vue')
         },
+        {
+            path: '/clientes',
+            component: () => import('../views/clientes/index.vue')
+        },
         
         {
             path: '/mi-cuenta',

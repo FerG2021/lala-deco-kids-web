@@ -90,7 +90,7 @@
               </span>
             </template>
           </Column>
-          <Column field="subtotal" header="Subtotal">
+          <Column field="subtotal" header="Subtotal" style="min-width:2rem">
             <template #body="slotProps">
               <span>
                 $ {{ slotProps.data.subtotal }}
@@ -100,13 +100,12 @@
           </Column>
 
             <template #footer>
-              <!-- <div style="display: flex"> -->
-                <div style="margin-left: 630px">
-                  Total:  $ {{ datos.venta.totalPrice }}
+              <div style="display: flex">
+                <div style="margin-left: auto">
+                  Total:  $ {{ moneda(datos.venta.totalPrice) }}
                 </div>
-              <!-- </div> -->
+              </div>
             </template>
-
           </DataTable>
 
       </div>
@@ -254,7 +253,7 @@ export default {
           console.log(response);
           this.loadingBtnPDF = false
 
-          window.open(response.data, '_blank')
+          window.open(response.data.data, '_blank')
         })
     },
 
@@ -391,6 +390,11 @@ export default {
         });
 
       this.loadingBtnGuardar = false;
+    },
+
+    moneda(x) {
+      let aux = parseFloat(x);
+      return aux.toLocaleString("es-AR");
     },
   },
 };
