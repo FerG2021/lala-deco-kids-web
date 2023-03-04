@@ -5,11 +5,11 @@
     <Dialog
       v-model:visible="display"
       icon="pi pi-refresh"
-      :style="{ width: '60%' }"
+      :style="{ width: '80%' }"
       class="flex justify-content-center"
       :draggable="false"
     >
-      <template #header icon="pi pi-refresh" style="margin: 0px" class="s">
+      <template #header>
         <h3 style="margin: 0px">
           <i class="pi pi-shopping-cart" style="font-size: 20px" /> Nueva venta
         </h3>
@@ -178,9 +178,14 @@
               </div>
             </div>
 
-            {{ arrayProductosVenta.length }}
+            <!-- {{ arrayProductosVenta.length }} -->
             <div>
-              <DataTable :value="arrayProductosVenta" responsiveLayout="scroll">
+              <DataTable
+                :value="arrayProductosVenta"
+                responsiveLayout="scroll"
+                headerStyle="text-align: center"
+                style="text-align: center"
+              >
                 <Column field="nombre" header="Nombre">
                   <template #body="slotProps">
                     <span>
@@ -199,10 +204,17 @@
                   <template #body="slotProps">
                     <span>
                       <!-- {{ slotProps.data.cantidad }} -->
-                      <InputText
+                      <InputNumber
                         v-model="slotProps.data.cantidad"
                         style="width: 50%"
                         @change="cambiarCantidadProductoEnVenta(slotProps.data)"
+                        showButtons
+                        buttonLayout="horizontal"
+                        :step="1"
+                        decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success"
+                        incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus"
                       />
                     </span>
                   </template>
@@ -210,26 +222,29 @@
 
                 <Column field="subtotal" header="Subtotal">
                   <template #body="slotProps">
-                    <span> $ {{ (slotProps.data.subtotal).toFixed(2) }} </span>
+                    <span> $ {{ slotProps.data.subtotal.toFixed(2) }} </span>
                   </template>
                 </Column>
 
-                <Column field="eliminar" header="Eliminar">
+                <Column
+                  field="eliminar"
+                  header="Eliminar"
+                  headerStyle="text-align: center"
+                >
                   <template #body="slotProps">
-                    <!-- <div style="display: flex">
-                      <div style="margin: auto"> -->
-                    <Button
-                      icon="pi pi-trash"
-                      class="p-button-rounded p-button-danger"
-                      @click="eliminar(slotProps)"
-                    />
-                    <!-- </div>
-                    </div> -->
+                    <div style="display: flex">
+                      <Button
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger"
+                        @click="eliminar(slotProps)"
+                        style="margin: auto"
+                      />
+                    </div>
                   </template>
                 </Column>
                 <template #footer>
                   <div class="grid">
-                    <div class="col-8"></div>
+                    <div class="col-9"></div>
                     <div>Total: $ {{ this.precioTotal.toFixed(2) }}</div>
                   </div>
                 </template>
@@ -241,12 +256,12 @@
 
                 <div class="field col-12 md:col-4" style="margin-top: 30px">
                   <div class="p-float-label">
-                    <InputNumber 
+                    <InputNumber
                       id="montoPagado"
                       v-model="form.montoPagado"
                       style="width: 100%"
-                      mode="currency" 
-                      currency="ARS" 
+                      mode="currency"
+                      currency="ARS"
                       locale="es-AR"
                       :max="precioTotal"
                     />
@@ -254,8 +269,6 @@
                   </div>
                 </div>
               </div>
-
-              
             </div>
           </div>
         </form>
@@ -451,9 +464,7 @@ export default {
         console.log(this.clientes);
       });
 
-      // 
-      
-
+      //
     },
 
     limpiarSelectNombreCliente() {
@@ -612,37 +623,37 @@ export default {
         this.loadingBtnGuardar = true;
 
         let anio = this.form.fechaVenta.getFullYear();
-        let mes = this.form.fechaVenta.getMonth()+1;
-        let dia = this.form.fechaVenta.getDate()
+        let mes = this.form.fechaVenta.getMonth() + 1;
+        let dia = this.form.fechaVenta.getDate();
 
         console.log("dia, mes, anio");
         console.log(anio + "-" + mes + "-" + dia);
-
 
         let params = {
           fechaVenta: anio + "-" + mes + "-" + dia,
           tipoCliente: this.form.tipoCliente,
           arrayProductosVenta: JSON.stringify(this.arrayProductosVenta),
           // precioTotal: this.precioTotal,
-          precioTotal: this.precioTotal
-        }
+          precioTotal: this.precioTotal,
+        };
 
         if (this.tipoCliente == 2 && this.form.nombreCliente != null) {
-          params.clienteVenta = tis.form.nombreCliente.id
+          params.clienteVenta = tis.form.nombreCliente.id;
         }
 
-        params.nombreVendedor = this.$store.state.user.name + " " + this.$store.state.user.lastname
+        params.nombreVendedor =
+          this.$store.state.user.name + " " + this.$store.state.user.lastname;
 
         if (this.form.tipoCliente == 0) {
-          params.idCliente = 0
-          params.nombreCliente = "Consumidor final"        
+          params.idCliente = 0;
+          params.nombreCliente = "Consumidor final";
         } else {
-          params.idCliente = this.form.nombreCliente.id
-          params.nombreCliente = this.form.nombreCliente.completName
-          params.nameClient = this.form.nombreCliente.nameClient
-          params.lastNameClient = this.form.nombreCliente.lastNameClient
-          params.dniClient = this.form.nombreCliente.dniClient
-          params.montoPagado = this.form.montoPagado
+          params.idCliente = this.form.nombreCliente.id;
+          params.nombreCliente = this.form.nombreCliente.completName;
+          params.nameClient = this.form.nombreCliente.nameClient;
+          params.lastNameClient = this.form.nombreCliente.lastNameClient;
+          params.dniClient = this.form.nombreCliente.dniClient;
+          params.montoPagado = this.form.montoPagado;
         }
 
         console.log("this.store.state.user");
@@ -651,48 +662,42 @@ export default {
         console.log("anio");
         console.log(this.form.fechaVenta.getFullYear());
 
-
         console.log("this.form.nombreCliente");
         console.log(this.form.nombreCliente);
-
 
         console.log("params");
         console.log(params);
 
+        await this.axios.post("/api/venta/crear", params).then((response) => {
+          console.log("response");
+          console.log(response);
+          if (response.data.code == 200) {
+            console.log("response.data");
+            console.log(response.data);
 
-
-        await this.axios.post("/api/venta/crear", params)
-          .then(response => {
-            console.log("response");
-            console.log(response);
-            if (response.data.code == 200) {
-              console.log("response.data");
-              console.log(response.data);
-
+            this.$toast.add({
+              severity: "success",
+              summary: "Mensaje de confirmación",
+              detail: response.data.data,
+              life: 3000,
+            });
+            this.$emit("actualizar-tabla");
+            this.display = false;
+          } else {
+            console.log("response.data");
+            console.log(response.data);
+            for (const property in response.data.data) {
+              // console.log(`${property}: ${response.data.data[property]}`);
               this.$toast.add({
-                severity: "success",
-                summary: "Mensaje de confirmación",
-                detail: response.data.data,
-                life: 3000,
+                severity: "error",
+                summary: "Se ha producido un error",
+                detail: `${response.data.data[property]}`,
+                life: 5000,
               });
-              this.$emit('actualizar-tabla');
-              this.display = false;
-
-            } else {
-              console.log("response.data");
-              console.log(response.data);
-              for (const property in response.data.data) {
-                // console.log(`${property}: ${response.data.data[property]}`);
-                this.$toast.add({
-                  severity: "error",
-                  summary: "Se ha producido un error",
-                  detail: `${response.data.data[property]}`,
-                  life: 5000,
-                });
-              }
             }
-          })
-          
+          }
+        });
+
         this.loadingBtnGuardar = false;
       } else {
         this.$toast.add({
@@ -702,8 +707,6 @@ export default {
           life: 5000,
         });
       }
-
-      
     },
 
     onUpload() {
@@ -752,7 +755,7 @@ export default {
       this.form.codigoProducto = null;
       this.form.nombreProducto = null;
       this.arrayProductosVenta = null;
-      this.form.montoPagado = null
+      this.form.montoPagado = null;
 
       this.productos = [];
       this.clientes = [];
@@ -773,9 +776,5 @@ export default {
 
 .p-dialog {
   border-radius: 30% !important;
-}
-
-.p-toolbar {
-  /* background-color: var(--blue-500)red !important; */
 }
 </style>

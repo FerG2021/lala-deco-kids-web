@@ -1,21 +1,19 @@
 <template>
   <main class="home-page">
     <Card>
-      <template #title>
-        Home
-      </template>
+      <!-- <template #title> Home </template> -->
       <template #content>
         <!-- PRIMERA FILA -->
         <div class="card">
           <div class="flex">
-            <Card  class="card-home" @click="$router.replace('/usuarios')">
+            <Card class="card-home" @click="$router.replace('/usuarios')">
               <template #title>
                 <h2 style="text-align: center">Administración</h2>
               </template>
               <template #content>
                 <div style="display: flex">
                   <div style="margin: auto">
-                    <i class="pi pi-cog" style="font-size: 80px"></i>
+                    <i class="pi pi-user" style="font-size: 80px"></i>
                   </div>
                 </div>
               </template>
@@ -39,7 +37,7 @@
 
             <Divider layout="vertical" />
 
-            <Card  class="card-home">
+            <Card class="card-home">
               <template #title>
                 <h2 style="text-align: center">Ventas</h2>
               </template>
@@ -55,11 +53,11 @@
           </div>
         </div>
 
-        <Divider/>
+        <Divider />
 
         <div class="card">
           <div class="flex">
-            <Card  class="card-home">
+            <Card class="card-home">
               <template #title>
                 <h2 style="text-align: center">Presupuestos</h2>
               </template>
@@ -74,7 +72,7 @@
 
             <Divider layout="vertical" />
 
-            <Card  class="card-home">
+            <Card class="card-home">
               <template #title>
                 <h2 style="text-align: center">Clientes</h2>
               </template>
@@ -90,7 +88,7 @@
 
             <Divider layout="vertical" />
 
-            <Card  class="card-home">
+            <Card class="card-home">
               <template #title>
                 <h2 style="text-align: center">Cuenta corriente</h2>
               </template>
@@ -113,13 +111,11 @@
 <script>
 export default {
   data() {
-    return {
-      
-    }
+    return {};
   },
 
   methods: {
-    algo(){
+    algo() {
       console.log("algo");
     },
   },
@@ -127,16 +123,20 @@ export default {
 </script>
 
 <style>
-  .card-home {
-    width: 33%;
-    /* height: 15rem !important; */
-    transition: 0.3s !important;
-  }
+* {
+  font-family: "Poppins", sans-serif;
+}
 
-  .card-home:hover {
-    /* width: 35% !important;
+.card-home {
+  width: 33%;
+  /* height: 15rem !important; */
+  transition: 0.3s !important;
+}
+
+.card-home:hover {
+  /* width: 35% !important;
     height: 16rem !important; */
-    background-color: #d8d8d8;
-    cursor: pointer;
-  }
+  background-color: #d8d8d8;
+  cursor: pointer;
+}
 </style>

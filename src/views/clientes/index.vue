@@ -2,41 +2,11 @@
   <main class="about-page">
     <Card>
       <template #header>
-        <h1 style="margin-top: 15px; margin-left: 15px">Clientes</h1>
+        <h1 style="margin-top: 30px; margin-left: 30px">Clientes</h1>
       </template>
 
       <template #content>
-        <!-- <div style="display: flex">
-          <div style="margin-left: auto">
-            <Button 
-              label="Nuevo producto" 
-              @click="$refs.modalNuevo.abrir()"/>
-          </div>
-        </div> -->
-
         <div style="margin-top: 10px">
-          <Toolbar class="mb-4">
-            <!-- <template #start>
-              <Button
-                label="Excel"
-                icon="pi pi-file-excel"
-                class="p-button-success mr-2"
-                @click="exportCSV($event)"
-              />
-
-              <Button
-                label="PDF"
-                icon="pi pi-file-pdf"
-                class="p-button-danger"
-                @click="exportPDF($event)"
-              />
-            </template> -->
-
-            <template #end>
-              <Button label="Nuevo cliente" @click="$refs.modalNuevo.abrir()" />
-            </template>
-          </Toolbar>
-
           <DataTable
             :value="cuentascorrientes"
             responsiveLayout="scroll"
@@ -44,7 +14,11 @@
             class="p-datatable-customers"
             :rows="10"
             :loading="loading"
-            :globalFilterFields="['lastNameClient', 'nameClient', 'phoneClient']"
+            :globalFilterFields="[
+              'lastNameClient',
+              'nameClient',
+              'phoneClient',
+            ]"
             v-model:filters="filters"
             filterDisplay="menu"
             style="text-align: center"
@@ -55,15 +29,25 @@
           >
             <template #header>
               <div style="display: flex">
-                <!-- <h5 class="m-0">Customers</h5> -->
-                <div style="margin-left: 0px">
-                  <span class="p-input-icon-left">
-                    <i class="pi pi-search" />
-                    <InputText
-                      v-model="filters['global'].value"
-                      placeholder="Escriba para buscar"
+                <div style="width: 100%">
+                  <div style="float: left">
+                    <span class="p-input-icon-left">
+                      <i class="pi pi-search" />
+                      <InputText
+                        v-model="filters['global'].value"
+                        placeholder="Escriba para buscar"
+                      />
+                    </span>
+                  </div>
+                </div>
+
+                <div style="width: 100%">
+                  <div style="float: right">
+                    <Button
+                      label="Nuevo cliente"
+                      @click="$refs.modalNuevo.abrir()"
                     />
-                  </span>
+                  </div>
                 </div>
               </div>
             </template>
@@ -103,16 +87,21 @@
                 <span> {{ slotProps.data.dniClient }} </span>
               </template>
             </Column>
-            
+
             <!-- Editar -->
-            <Column field="editar" header="Editar" headerStyle="width: 2em" style="min-width:2rem">
+            <Column
+              field="editar"
+              header="Editar"
+              headerStyle="width: 2em"
+              style="min-width: 2rem"
+            >
               <template #body="slotProps">
                 <div style="display: flex">
                   <div style="margin: auto">
-                    <Button 
-                      icon="pi pi-pencil" 
-                      class="p-button-rounded p-button-warning" 
-                      @click="$refs.modalModificar.abrir(slotProps.data.id)" 
+                    <Button
+                      icon="pi pi-pencil"
+                      class="p-button-rounded p-button-warning"
+                      @click="$refs.modalModificar.abrir(slotProps.data.id)"
                       style="margin-right: 5px"
                     />
                   </div>
@@ -121,7 +110,12 @@
             </Column>
 
             <!-- Detalle -->
-            <Column field="detalle" header="Detalle" headerStyle="width: 2em" style="min-width:2rem">
+            <Column
+              field="detalle"
+              header="Detalle"
+              headerStyle="width: 2em"
+              style="min-width: 2rem"
+            >
               <template #body="slotProps">
                 <div style="display: flex">
                   <div style="margin: auto">
@@ -129,7 +123,7 @@
                       icon="pi pi-eye"
                       class="p-button-rounded p-button-primary mr-2"
                       @click="$refs.modalDetalle.abrir(slotProps.data.id)"
-                      style="margin-right: 5px;"
+                      style="margin-right: 5px"
                     />
                   </div>
                 </div>
@@ -141,12 +135,9 @@
     </Card>
   </main>
 
-  <modal-nuevo 
-    ref="modalNuevo" 
-    @actualizarTabla="obtenerTodos()"
-  ></modal-nuevo>
+  <modal-nuevo ref="modalNuevo" @actualizarTabla="obtenerTodos()"></modal-nuevo>
 
-  <modal-detalle 
+  <modal-detalle
     ref="modalDetalle"
     @actualizarTabla="obtenerTodos()"
   ></modal-detalle>
@@ -206,8 +197,7 @@ export default {
       this.usuarios = [];
       this.cuentascorrientes = [];
       this.loading = true;
-      await this.axios.get("/api/cliente/obtenerTodos")
-      .then((response) => {
+      await this.axios.get("/api/cliente/obtenerTodos").then((response) => {
         if (response.data.code == 200) {
           console.log("response.data");
           console.log(response.data);
@@ -221,7 +211,7 @@ export default {
       this.loading = false;
     },
 
-    async generarPDF(id){
+    async generarPDF(id) {
       // this.loadingBtnPDF = true
 
       await this.axios
@@ -232,12 +222,13 @@ export default {
             console.log(response);
             // this.loadingBtnPDF = false
 
-            window.open(response.data.data, '_blank')
-          } else {}
-        })
+            window.open(response.data.data, "_blank");
+          } else {
+          }
+        });
     },
 
-    async enviarWhatsApp(id){
+    async enviarWhatsApp(id) {
       await this.axios
         .get("/api/cuentacorriente/datosWhatsApp/" + id)
         .then((response) => {
@@ -247,8 +238,9 @@ export default {
             // this.loadingBtnPDF = false
 
             // window.open(response.data.data, '_blank')
-          } else {}
-        })
+          } else {
+          }
+        });
     },
 
     moneda(x) {

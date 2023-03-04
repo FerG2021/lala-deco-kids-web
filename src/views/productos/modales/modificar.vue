@@ -5,36 +5,54 @@
     <Dialog
       v-model:visible="display"
       icon="pi pi-refresh"
-      :style="{width: '35%'}"
+      :style="{ width: '35%' }"
       class="flex justify-content-center"
       :draggable="false"
     >
-      <template #header icon="pi pi-refresh" style="margin: 0px" class="s">
-        <h3 style="margin: 0px"><i class="pi pi-box" style="font-size: 20px"/> Modificar producto</h3>
+      <template #header>
+        <h3 style="margin: 0px">
+          <i class="pi pi-box" style="font-size: 20px" /> Modificar producto
+        </h3>
       </template>
 
       <div style="display: flex" v-if="datos == null">
         <div style="margin: auto">
-          <ProgressSpinner style="text-align: center"/>
+          <ProgressSpinner style="text-align: center" />
         </div>
       </div>
 
       <div style="margin-top: 5px; width: 100%" v-if="datos != null">
         <!-- <h5 style="margin: 0px">DNI</h5> -->
-        <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid" style="margin-top: 30px">
-
+        <form
+          @submit.prevent="handleSubmit(!v$.$invalid)"
+          class="p-fluid"
+          style="margin-top: 30px"
+        >
           <!-- Codigo -->
           <div class="field">
             <div class="p-float-label">
-              <InputNumber 
+              <InputText
                 id="codigo"
                 v-model="form.codigo"
                 style="width: 100%"
-                :class="{'p-invalid':v$.codigo.$invalid && submitted}"
+                :class="{ 'p-invalid': v$.codigo.$invalid && submitted }"
               />
-              <label for="codigo" :class="{'p-error':v$.codigo.$invalid && submitted}">Código</label>
+              <label
+                for="codigo"
+                :class="{ 'p-error': v$.codigo.$invalid && submitted }"
+                >Código</label
+              >
             </div>
-            <small v-if="(v$.codigo.$invalid && submitted) || v$.codigo.$pending.$response" class="p-error">{{v$.codigo.required.$message.replace('Value', 'Codigo')}}</small>
+            <small
+              v-if="
+                (v$.codigo.$invalid && submitted) ||
+                v$.codigo.$pending.$response
+              "
+              class="p-error"
+              >{{
+                v$.codigo.required.$message.replace("Value", "Codigo")
+              }}</small
+            >
           </div>
 
           <!-- Nombre -->
@@ -45,28 +63,57 @@
                 type="text"
                 v-model="form.nombre"
                 style="width: 100%"
-                :class="{'p-invalid':v$.nombre.$invalid && submitted}"
+                :class="{ 'p-invalid': v$.nombre.$invalid && submitted }"
               />
-              <label for="nombre" :class="{'p-error':v$.nombre.$invalid && submitted}">Nombre</label>
+              <label
+                for="nombre"
+                :class="{ 'p-error': v$.nombre.$invalid && submitted }"
+                >Nombre</label
+              >
             </div>
-            <small v-if="(v$.nombre.$invalid && submitted) || v$.nombre.$pending.$response" class="p-error">{{v$.nombre.required.$message.replace('Value', 'Nombre')}}</small>
+            <small
+              v-if="
+                (v$.nombre.$invalid && submitted) ||
+                v$.nombre.$pending.$response
+              "
+              class="p-error"
+              >{{
+                v$.nombre.required.$message.replace("Value", "Nombre")
+              }}</small
+            >
           </div>
-         
+
           <!-- Precio de venta -->
           <div class="field">
             <div class="p-float-label">
-              <InputNumber 
+              <InputNumber
                 id="precioVenta"
                 v-model="form.precioVenta"
                 style="width: 100%"
-                mode="currency" 
-                currency="ARS" 
+                mode="currency"
+                currency="ARS"
                 locale="es-AR"
-                :class="{'p-invalid':v$.precioVenta.$invalid && submitted}"
+                :class="{ 'p-invalid': v$.precioVenta.$invalid && submitted }"
               />
-              <label for="precioVenta" :class="{'p-error':v$.precioVenta.$invalid && submitted}">Precio de venta</label>
+              <label
+                for="precioVenta"
+                :class="{ 'p-error': v$.precioVenta.$invalid && submitted }"
+                >Precio de venta</label
+              >
             </div>
-            <small v-if="(v$.precioVenta.$invalid && submitted) || v$.precioVenta.$pending.$response" class="p-error">{{v$.precioVenta.required.$message.replace('Value', 'Precio de venta')}}</small>
+            <small
+              v-if="
+                (v$.precioVenta.$invalid && submitted) ||
+                v$.precioVenta.$pending.$response
+              "
+              class="p-error"
+              >{{
+                v$.precioVenta.required.$message.replace(
+                  "Value",
+                  "Precio de venta"
+                )
+              }}</small
+            >
           </div>
 
           <!-- Porc de fiado -->
@@ -77,68 +124,128 @@
                 v-model="form.procPrecioFiado"
                 style="width: 100%"
                 suffix=" %"
-                :class="{'p-invalid':v$.procPrecioFiado.$invalid && submitted}"
+                :class="{
+                  'p-invalid': v$.procPrecioFiado.$invalid && submitted,
+                }"
                 @change="actualizarPrecioFiado()"
               />
-              <label for="procPrecioFiado" :class="{'p-error':v$.procPrecioFiado.$invalid && submitted}">Porcentaje precio de fiado</label>
+              <label
+                for="procPrecioFiado"
+                :class="{ 'p-error': v$.procPrecioFiado.$invalid && submitted }"
+                >Porcentaje precio de fiado</label
+              >
             </div>
-            <small v-if="(v$.procPrecioFiado.$invalid && submitted) || v$.procPrecioFiado.$pending.$response" class="p-error">{{v$.procPrecioFiado.required.$message.replace('Value', 'Porcentaje de fiado')}}</small>
+            <small
+              v-if="
+                (v$.procPrecioFiado.$invalid && submitted) ||
+                v$.procPrecioFiado.$pending.$response
+              "
+              class="p-error"
+              >{{
+                v$.procPrecioFiado.required.$message.replace(
+                  "Value",
+                  "Porcentaje de fiado"
+                )
+              }}</small
+            >
           </div>
 
           <!-- Precio de fiado -->
           <div class="field">
             <div class="p-float-label">
-              <InputNumber 
+              <InputNumber
                 id="procPrecioFiado"
                 v-model="form.precioFiado"
                 style="width: 100%"
-                mode="currency" 
-                currency="ARS" 
+                mode="currency"
+                currency="ARS"
                 locale="es-AR"
-                :class="{'p-invalid':v$.precioFiado.$invalid && submitted}"
+                :class="{ 'p-invalid': v$.precioFiado.$invalid && submitted }"
                 disabled
               />
-              <label for="precioFiado" :class="{'p-error':v$.precioFiado.$invalid && submitted}">Porcentaje precio de fiado</label>
+              <label
+                for="precioFiado"
+                :class="{ 'p-error': v$.precioFiado.$invalid && submitted }"
+                >Porcentaje precio de fiado</label
+              >
             </div>
-            <small v-if="(v$.precioFiado.$invalid && submitted) || v$.precioFiado.$pending.$response" class="p-error">{{v$.precioFiado.required.$message.replace('Value', 'Precio de fiado')}}</small>
+            <small
+              v-if="
+                (v$.precioFiado.$invalid && submitted) ||
+                v$.precioFiado.$pending.$response
+              "
+              class="p-error"
+              >{{
+                v$.precioFiado.required.$message.replace(
+                  "Value",
+                  "Precio de fiado"
+                )
+              }}</small
+            >
           </div>
 
           <!-- Stock -->
           <div class="field">
             <div class="p-float-label">
-              <InputNumber 
+              <InputNumber
                 id="stock"
                 v-model="form.stock"
                 style="width: 100%"
-                :class="{'p-invalid':v$.stock.$invalid && submitted}"
+                :class="{ 'p-invalid': v$.stock.$invalid && submitted }"
               />
-              <label for="stock" :class="{'p-error':v$.stock.$invalid && submitted}">Stock</label>
+              <label
+                for="stock"
+                :class="{ 'p-error': v$.stock.$invalid && submitted }"
+                >Stock</label
+              >
             </div>
-            <small v-if="(v$.stock.$invalid && submitted) || v$.stock.$pending.$response" class="p-error">{{v$.stock.required.$message.replace('Value', 'Stock')}}</small>
+            <small
+              v-if="
+                (v$.stock.$invalid && submitted) || v$.stock.$pending.$response
+              "
+              class="p-error"
+              >{{ v$.stock.required.$message.replace("Value", "Stock") }}</small
+            >
           </div>
 
           <!-- Stock minimo-->
           <div class="field">
             <div class="p-float-label">
-              <InputNumber 
+              <InputNumber
                 id="stockMinimo"
                 v-model="form.stockMinimo"
                 style="width: 100%"
-                :class="{'p-invalid':v$.stockMinimo.$invalid && submitted}"
+                :class="{ 'p-invalid': v$.stockMinimo.$invalid && submitted }"
               />
-              <label for="stockMinimo" :class="{'p-error':v$.stockMinimo.$invalid && submitted}">Stock mínimo</label>
+              <label
+                for="stockMinimo"
+                :class="{ 'p-error': v$.stockMinimo.$invalid && submitted }"
+                >Stock mínimo</label
+              >
             </div>
-            <small v-if="(v$.stockMinimo.$invalid && submitted) || v$.stockMinimo.$pending.$response" class="p-error">{{v$.stockMinimo.required.$message.replace('Value', 'Stock mínimo')}}</small>
+            <small
+              v-if="
+                (v$.stockMinimo.$invalid && submitted) ||
+                v$.stockMinimo.$pending.$response
+              "
+              class="p-error"
+              >{{
+                v$.stockMinimo.required.$message.replace(
+                  "Value",
+                  "Stock mínimo"
+                )
+              }}</small
+            >
           </div>
 
           <div class="field" v-if="form.imagenAPI != null">
             <h5>Imagen</h5>
-            <Image 
-              preview 
-              :src="form.imagenAPI" 
-              alt="Image" 
-              width="130" 
-              class="ver-imagen" 
+            <Image
+              preview
+              :src="form.imagenAPI"
+              alt="Image"
+              width="130"
+              class="ver-imagen"
               imageStyle="border-radius: 8px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);padding: 3px;"
             />
           </div>
@@ -146,20 +253,24 @@
           <!-- Imagen -->
           <div class="field">
             <div class="p-float-label">
-              <FileUpload 
-                name="form.demo" 
-                url="./upload.php" 
-                @upload="onUpload" 
+              <FileUpload
+                name="form.demo"
+                url="./upload.php"
+                @upload="onUpload"
                 @select="imagenSeleccionada"
-                :multiple="false" 
-                accept="image/*" 
+                :multiple="false"
+                accept="image/*"
                 :maxFileSize="1000000"
                 invalidFileSizeMessage="{0}: Tamaño de archivo inválido, debe ser menor a {1}."
               >
                 <template #empty>
-                    <p>Arrastre las imágenes para subirlas</p>
-                    <p><b>Sólo subir si desea modificar la imagen cargada previamente</b></p>
-
+                  <p>Arrastre las imágenes para subirlas</p>
+                  <p>
+                    <b
+                      >Sólo subir si desea modificar la imagen cargada
+                      previamente</b
+                    >
+                  </p>
                 </template>
               </FileUpload>
               <!-- <label for="stockMinimo" :class="{'p-error':v$.stockMinimo.$invalid && submitted}">Stock mínimo</label> -->
@@ -186,7 +297,7 @@
 <script>
 import { email, required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
-import { helpers } from '@vuelidate/validators';
+import { helpers } from "@vuelidate/validators";
 
 export default {
   setup: () => ({ v$: useVuelidate() }),
@@ -219,31 +330,46 @@ export default {
   validations() {
     return {
       codigo: {
-        required: helpers.withMessage('El código es requerido', required),
+        required: helpers.withMessage("El código es requerido", required),
         // email,
       },
       nombre: {
-        required: helpers.withMessage('El nombre es requerido', required),
+        required: helpers.withMessage("El nombre es requerido", required),
         // email,
       },
       precioVenta: {
-        required: helpers.withMessage('El precio de venta es requerido', required),
+        required: helpers.withMessage(
+          "El precio de venta es requerido",
+          required
+        ),
         // email,
       },
       procPrecioFiado: {
-        required: helpers.withMessage('El procentaje de fiado es requerido', required),
+        required: helpers.withMessage(
+          "El procentaje de fiado es requerido",
+          required
+        ),
         // email,
       },
       precioFiado: {
-        required: helpers.withMessage('El precio de fiado es requerido', required),
+        required: helpers.withMessage(
+          "El precio de fiado es requerido",
+          required
+        ),
         // email,
       },
       stock: {
-        required: helpers.withMessage('El precio de fiado es requerido', required),
+        required: helpers.withMessage(
+          "El precio de fiado es requerido",
+          required
+        ),
         // email,
       },
       stockMinimo: {
-        required: helpers.withMessage('El precio de fiado es requerido', required),
+        required: helpers.withMessage(
+          "El precio de fiado es requerido",
+          required
+        ),
         // email,
       },
     };
@@ -258,7 +384,7 @@ export default {
       this.display = true;
       this.isFormValid = false;
       this.resetForm();
-      this.getDatos()
+      this.getDatos();
     },
 
     cerrar() {
@@ -271,49 +397,58 @@ export default {
       this.display = false;
     },
 
-    
-
-
-    async getDatos(){
+    async getDatos() {
       console.log("abrir");
-      await this.axios.get("/api/producto/obtenerDatos/" + this.id)
-          .then(response => {
-            if (response.data.code == 200) {
-              this.form.id = this.id
-              this.form.codigo = response.data.data.codeProduct
-              this.form.nombre = response.data.data.nameProduct
-              this.form.precioVenta = response.data.data.priceSaleProduct
-              this.form.procPrecioFiado = response.data.data.porcPriceTrustProduct
-              let porcentaje = this.form.procPrecioFiado / 100
-              this.form.precioFiado = (this.form.precioVenta * porcentaje) + parseFloat(this.form.precioVenta)
-              this.form.stock = response.data.data.cantStockProduct
-              this.form.stockMinimo = response.data.data.cantStockMinProduct
-              this.form.imagenAPI = response.data.data.image
-              this.form.imagenID =  "public/storage/imagenes/" + response.data.data.imageID
-              this.form.imagenID = this.form.imagenID.toString()
-              this.datos = response.data.data
-            } 
-          })
+      await this.axios
+        .get("/api/producto/obtenerDatos/" + this.id)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.form.id = this.id;
+            this.form.codigo = response.data.data.codeProduct;
+            this.form.nombre = response.data.data.nameProduct;
+            this.form.precioVenta = response.data.data.priceSaleProduct;
+            this.form.procPrecioFiado =
+              response.data.data.porcPriceTrustProduct;
+            let porcentaje = this.form.procPrecioFiado / 100;
+            this.form.precioFiado =
+              this.form.precioVenta * porcentaje +
+              parseFloat(this.form.precioVenta);
+            this.form.stock = response.data.data.cantStockProduct;
+            this.form.stockMinimo = response.data.data.cantStockMinProduct;
+            this.form.imagenAPI = response.data.data.image;
+            this.form.imagenID =
+              "public/storage/imagenes/" + response.data.data.imageID;
+            this.form.imagenID = this.form.imagenID.toString();
+            this.datos = response.data.data;
+          }
+        });
     },
 
-    actualizarPrecioFiado(){
-      let porc = parseFloat(this.form.procPrecioFiado) / 100
+    actualizarPrecioFiado() {
+      let porc = parseFloat(this.form.procPrecioFiado) / 100;
 
-      this.form.precioFiado = (parseFloat(this.form.precioVenta) * parseFloat(porc)) + parseFloat(this.form.precioVenta)
+      this.form.precioFiado =
+        parseFloat(this.form.precioVenta) * parseFloat(porc) +
+        parseFloat(this.form.precioVenta);
     },
 
     onUpload() {
-        this.$toast.add({severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000});
+      this.$toast.add({
+        severity: "info",
+        summary: "Success",
+        detail: "File Uploaded",
+        life: 3000,
+      });
     },
 
-    imagenSeleccionada(event){
+    imagenSeleccionada(event) {
       console.log("imagen");
       console.log(event.files[0]);
-      this.form.imagen = event.files[0]
+      this.form.imagen = event.files[0];
     },
 
     handleSubmit(isFormValid) {
-      this.isFormValid = isFormValid
+      this.isFormValid = isFormValid;
 
       this.submitted = true;
 
@@ -326,29 +461,29 @@ export default {
 
     toggleDialog() {
       this.showMessage = !this.showMessage;
-  
-      if(!this.showMessage) {
+
+      if (!this.showMessage) {
         this.resetForm();
       }
     },
 
     resetForm() {
-      this.form.id = null
-      this.form.codigo = null
-      this.form.nombre = null
-      this.form.precioVenta = null
-      this.form.procPrecioFiado = null
-      this.form.stock = null
-      this.form.stockMinimo = null
-      this.form.imagen = null
-      this.form.imagenAPI = null
-      this.form.imagenID = null
+      this.form.id = null;
+      this.form.codigo = null;
+      this.form.nombre = null;
+      this.form.precioVenta = null;
+      this.form.procPrecioFiado = null;
+      this.form.stock = null;
+      this.form.stockMinimo = null;
+      this.form.imagen = null;
+      this.form.imagenAPI = null;
+      this.form.imagenID = null;
       this.submitted = false;
-      this.datos = null
+      this.datos = null;
     },
 
     async guardar() {
-      this.loadingBtnGuardar = true
+      this.loadingBtnGuardar = true;
 
       // console.log("this.form");
       // console.log(this.form);
@@ -373,83 +508,75 @@ export default {
       // formData.append("imagen", this.form.imagen)
 
       for (let key in this.form) {
-        formData.append(key, this.form[key])        
+        formData.append(key, this.form[key]);
       }
 
       console.log("formData");
       console.log(formData);
 
+      await this.axios
+        .post("/api/producto/actualizar", formData)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.code == 200) {
+            this.$toast.add({
+              severity: "success",
+              summary: "Mensaje de confirmación",
+              detail: "Producto actualizado con éxito",
+              life: 3000,
+            });
 
-      await this.axios.post("/api/producto/actualizar", formData)
-          .then(response => {
-            console.log(response.data);
-            if (response.data.code == 200) {
+            this.display = false;
+            this.$emit("actualizar-tabla");
+          } else {
+            console.log("response.data.data");
+            console.log(response.data.data);
 
+            for (const property in response.data.data) {
+              // console.log(`${property}: ${response.data.data[property]}`);
               this.$toast.add({
-                severity: "success",
-                summary: "Mensaje de confirmación",
-                detail: "Producto actualizado con éxito",
-                life: 3000,
+                severity: "error",
+                summary: "Se ha producido un error",
+                detail: `${response.data.data[property]}`,
+                life: 5000,
               });
-
-              this.display = false;
-              this.$emit("actualizar-tabla")
-
-
-            } else {
-              console.log("response.data.data");
-              console.log(response.data.data);
-
-              for (const property in response.data.data) {
-                // console.log(`${property}: ${response.data.data[property]}`);
-                this.$toast.add({
-                  severity: "error",
-                  summary: "Se ha producido un error",
-                  detail: `${response.data.data[property]}`,
-                  life: 5000,
-                });
-              }
-              // this.$toast.add({
-              //   severity: "success",
-              //   summary: "Se ha producido un error",
-              //   detail: response.data.data,
-              //   life: 5000,
-              // });
             }
+            // this.$toast.add({
+            //   severity: "success",
+            //   summary: "Se ha producido un error",
+            //   detail: response.data.data,
+            //   life: 5000,
+            // });
+          }
+        });
 
-        })
-
-        this.loadingBtnGuardar = false
-
-
-
-      
+      this.loadingBtnGuardar = false;
     },
   },
 };
 </script>
 
-<style scoped> 
-  .field {
-    margin-bottom: 1.5rem;
-  }
+<style scoped>
+.field {
+  margin-bottom: 1.5rem;
+}
 
-  .header {
-    margin: 0px !important;
-  }
+.header {
+  margin: 0px !important;
+}
 
-  .p-dialog {
-    border-radius: 30% !important;
-  }
+.p-dialog {
+  border-radius: 30% !important;
+}
 
-  .ver-imagen {
-    border-radius: 20px !important;
-  }
+.ver-imagen {
+  border-radius: 20px !important;
+}
 
-  .p-image-preview-indicator {
-    width: 130px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    border-radius: 8px;
-    padding: 3px;
-  }
+.p-image-preview-indicator {
+  width: 130px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 8px;
+  padding: 3px;
+}
 </style>

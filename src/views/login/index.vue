@@ -14,11 +14,18 @@
       <div class="contenedor-login" v-loading="loadingLogin">
         <div class="formulario">
           <!-- <div class="material-icons">account_circle</div> -->
-          <i class="pi pi-user loginIcon" ></i>
+          <!-- <i class="pi pi-user loginIcon"></i> -->
+
+          <img
+            src="../../assets/buhov.png"
+            alt=""
+            srcset=""
+            class="loginBuho"
+          />
 
           <!-- <span v-if="$store.state.auth">{{ $store.state.user.name }}</span> -->
-            <el-card class="card-form">
-              <!-- <el-form
+          <el-card class="card-form">
+            <!-- <el-form
                 ref="form"
                 :model="form"
                 :rules="rules"
@@ -64,8 +71,11 @@
                 </el-form-item>
               </el-form> -->
 
-            <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid" style="margin-top: 30px">
-              
+            <form
+              @submit.prevent="handleSubmit(!v$.$invalid)"
+              class="p-fluid"
+              style="margin-top: 30px"
+            >
               <!-- Usuario -->
               <div class="field">
                 <div class="p-float-label">
@@ -74,11 +84,24 @@
                     inputId="integeronly"
                     v-model="form.email"
                     style="width: 100%"
-                    :class="{'p-invalid':v$.email.$invalid && submitted}"
+                    :class="{ 'p-invalid': v$.email.$invalid && submitted }"
                   />
-                  <label for="dni" :class="{'p-error':v$.email.$invalid && submitted}">Mail</label>
+                  <label
+                    for="dni"
+                    :class="{ 'p-error': v$.email.$invalid && submitted }"
+                    >Mail</label
+                  >
                 </div>
-                <small v-if="(v$.email.$invalid && submitted) || v$.email.$pending.$response" class="p-error">{{v$.email.required.$message.replace('Value', 'DNI')}}</small>
+                <small
+                  v-if="
+                    (v$.email.$invalid && submitted) ||
+                    v$.email.$pending.$response
+                  "
+                  class="p-error"
+                  >{{
+                    v$.email.required.$message.replace("Value", "DNI")
+                  }}</small
+                >
               </div>
 
               <!-- Contraseña -->
@@ -89,11 +112,24 @@
                     v-model="form.password"
                     toggleMask
                     style="width: 100%"
-                    :class="{'p-invalid':v$.password.$invalid && submitted}"
+                    :class="{ 'p-invalid': v$.password.$invalid && submitted }"
                   />
-                  <label for="password" :class="{'p-error':v$.password.$invalid && submitted}">Contraseña</label>
+                  <label
+                    for="password"
+                    :class="{ 'p-error': v$.password.$invalid && submitted }"
+                    >Contraseña</label
+                  >
                 </div>
-                <small v-if="(v$.password.$invalid && submitted) || v$.password.$pending.$response" class="p-error">{{v$.password.required.$message.replace('Value', 'DNI')}}</small>
+                <small
+                  v-if="
+                    (v$.password.$invalid && submitted) ||
+                    v$.password.$pending.$response
+                  "
+                  class="p-error"
+                  >{{
+                    v$.password.required.$message.replace("Value", "DNI")
+                  }}</small
+                >
               </div>
 
               <Button
@@ -103,10 +139,7 @@
                 @click="login()"
               />
             </form>
-
-
-
-            </el-card>
+          </el-card>
         </div>
       </div>
     </el-card>
@@ -118,8 +151,7 @@ import { watch } from "@vue/runtime-core";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { email, required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
-import { helpers } from '@vuelidate/validators';
-
+import { helpers } from "@vuelidate/validators";
 
 export default {
   setup: () => ({ v$: useVuelidate() }),
@@ -159,31 +191,74 @@ export default {
     };
   },
 
-   validations() {
+  validations() {
     return {
       email: {
-        required: helpers.withMessage('El email es requerido', required),
+        required: helpers.withMessage("El email es requerido", required),
       },
       password: {
-        required: helpers.withMessage('La contraseña es requerida', required),
+        required: helpers.withMessage("La contraseña es requerida", required),
         // email,
       },
       apellido: {
-        required: helpers.withMessage('El apellido es requerido', required),
+        required: helpers.withMessage("El apellido es requerido", required),
       },
       sexo: {
-        required: helpers.withMessage('Seleccione un valor para sexo', required),
+        required: helpers.withMessage(
+          "Seleccione un valor para sexo",
+          required
+        ),
       },
       edad: {
-        required: helpers.withMessage('La edad es requerida', required),
+        required: helpers.withMessage("La edad es requerida", required),
       },
     };
   },
 
-
-
   methods: {
+    // async login() {
+    //   if (
+    //     this.form.email == null ||
+    //     this.form.email == "" ||
+    //     this.form.password == null ||
+    //     this.form.password == ""
+    //   ) {
+    //     this.$toast.add({
+    //       severity: "error",
+    //       summary: "Campos incompletos",
+    //       detail: "Se deben completar todos los campos",
+    //       life: 3000,
+    //     });
+    //   } else {
+    //     this.loadingLogin = true;
+
+    //     let params = {
+    //       mail: this.form.email,
+    //     };
+    //     await this.axios
+    //       .post("/api/usuario/obtenerDatosUsuarioLogin", params)
+    //       .then((response) => {
+    //         console.log("response");
+    //         console.log(response);
+    //         if (response.data.code == 200) {
+    //           console.log("response.data.data.id");
+    //           console.log(response.data.data.id);
+
+    //           localStorage.setItem("usuarioID", response.data.data.id);
+    //         }
+    //       });
+
+    //     console.log("antes del login");
+    //     await this.$store.dispatch("login", this.form);
+    //     console.log("hace algo");
+    //     this.loadingLogin = false;
+
+    //     return this.$router.replace("/");
+    //   }
+    // },
+
     async login() {
+      let existeError = 0;
       if (
         this.form.email == null ||
         this.form.email == "" ||
@@ -191,35 +266,113 @@ export default {
         this.form.password == ""
       ) {
         this.$toast.add({
-        severity: "error",
-        summary: "Campos incompletos",
-        detail: "Se deben completar todos los campos",
-        life: 3000,
-      });
+          severity: "error",
+          summary: "Campos incompletos",
+          detail: "Se deben completar todos los campos",
+          life: 3000,
+        });
       } else {
         this.loadingLogin = true;
-        
+        console.log("this.form");
+        console.log(this.form);
+        // this.me()
         let params = {
-          mail: this.form.email,
+          mail_usuario: this.form.email,
         };
         await this.axios
-          .post("/api/usuario/obtenerDatosUsuarioLogin", params)
+          .post("/api/usuario/obtenerDatosMail", params)
           .then((response) => {
             console.log("response");
             console.log(response);
-            if (response.data.code == 200) {
-              console.log("response.data.data.id");
-              console.log(response.data.data.id);
-
-              localStorage.setItem("usuarioID", response.data.data.id);
+            if (response) {
+              // if (response.data.data != undefined) {
+              if (response.data != undefined) {
+                console.log("response");
+                console.log(response);
+                // console.log(response.data.data);
+                if (response.data.data) {
+                  localStorage.setItem("usuarioID", response.data.data.id);
+                  localStorage.setItem(
+                    "tipoUsuario",
+                    response.data.data.tipo_usuario
+                  );
+                }
+              } else {
+                console.log("usuario o contraseña incorrecta");
+                ElMessage({
+                  type: "error",
+                  message: "¡Usuario o contraseña incorrecta!",
+                });
+                this.loadingLogin = false;
+              }
             }
+          })
+          .catch(function (error) {
+            if (error.response) {
+              // La respuesta fue hecha y el servidor respondió con un código de estado
+              // que esta fuera del rango de 2xx
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // La petición fue hecha pero no se recibió respuesta
+              // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
+              // http.ClientRequest en node.js
+              console.log(error.request);
+            } else {
+              // Algo paso al preparar la petición que lanzo un Error
+              console.log("Error", error.message);
+            }
+            console.log(error.config);
           });
 
-        // this.loadingLogin = false
-        console.log("antes del login");
-        await this.$store.dispatch("login", this.form);
-        console.log("hace algo");
+        // await this.$store.dispatch("login", this.form);
+
+        await this.axios.get("/sanctum/csrf-cookie");
+        await this.axios
+          .post("/login", this.form)
+          .then((res) => {
+            this.$store.dispatch("getUser");
+          })
+          // .catch(() => {
+          //   console.log("res");
+          //   console.log(res);
+
+          //   commit("SET_USER", null)
+          // })
+
+          .catch(function (error) {
+            existeError = 1;
+            if (error.response) {
+              // La respuesta fue hecha y el servidor respondió con un código de estado
+              // que esta fuera del rango de 2xx
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // La petición fue hecha pero no se recibió respuesta
+              // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
+              // http.ClientRequest en node.js
+              console.log(error.request);
+            } else {
+              // Algo paso al preparar la petición que lanzo un Error
+              console.log("Error", error.message);
+            }
+            console.log(error.config);
+          });
+
         this.loadingLogin = false;
+
+        console.log(existeError);
+
+        if (existeError == 1) {
+          this.$toast.add({
+            severity: "error",
+            summary: "Ocurrió un error",
+            detail: "Mail o contraseña incorrectos",
+            life: 3000,
+          });
+        }
 
         return this.$router.replace("/");
       }
@@ -239,7 +392,7 @@ export default {
     },
 
     handleSubmit(isFormValid) {
-      this.isFormValid = isFormValid
+      this.isFormValid = isFormValid;
 
       this.submitted = true;
 
@@ -252,15 +405,15 @@ export default {
 
     toggleDialog() {
       this.showMessage = !this.showMessage;
-  
-      if(!this.showMessage) {
+
+      if (!this.showMessage) {
         this.resetForm();
       }
     },
 
     resetForm() {
-      this.form.email = null
-      this.form.password = null
+      this.form.email = null;
+      this.form.password = null;
       this.submitted = false;
     },
   },
@@ -268,73 +421,88 @@ export default {
 </script>
 
 <style scoped>
-  .background-login {
-    height: 100vh;
-    background-color: var(--lightLala);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.background-login {
+  height: 100vh;
+  background-color: var(--lightLala);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(112, 112, 191);
+  background: linear-gradient(
+    180deg,
+    rgba(112, 112, 191, 1) 0%,
+    rgba(169, 169, 216, 1) 100%
+  );
+}
 
-  .btnLala {
-    background-color: var(--primaryLala);
-    border: 1px solid var(--primaryLala);
-  }
+.btnLala {
+  background-color: var(--primaryLala);
+  border: 1px solid var(--primaryLala);
+}
 
-  .btnLala:hover {
-    background-color: var(--primaryLalaHover);
-    border: 1px solid var(--primaryLalaHover);
-  }
+.btnLala:hover {
+  background-color: var(--primaryLalaHover);
+  border: 1px solid var(--primaryLalaHover);
+}
 
-  .card-login {
-    width: 65vh;
-  }
+.card-login {
+  width: 65vh;
+}
 
-  .contenedor-login {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
+.contenedor-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
 
-  .material-icons {
-    font-size: 18vh;
-    color: var(--dark);
-  }
+.material-icons {
+  font-size: 18vh;
+  color: var(--dark);
+}
 
-  .card-form {
-    height: 100%;
-  }
+.card-form {
+  height: 100%;
+}
 
-  .formulario {
-    width: 90vh;
-    height: 100%;
-    text-align: center;
-    display: block;
-  }
+.formulario {
+  width: 90vh;
+  height: 100%;
+  text-align: center;
+  display: block;
+}
 
-  .btnEnviar {
-    width: 100%;
-    text-align: center;
-  }
+.btnEnviar {
+  width: 100%;
+  text-align: center;
+}
 
-  .field {
-    margin-bottom: 1.5rem;
-  }
+.field {
+  margin-bottom: 1.5rem;
+}
 
-  .header {
-    margin: 0px !important;
-  }
+.header {
+  margin: 0px !important;
+}
 
-  .p-dialog {
-    border-radius: 30% !important;
-  }
+.p-dialog {
+  border-radius: 30% !important;
+}
 
-  .loginIcon{
-    font-size: 70px;
-    border: 6px solid black;
-    border-radius: 50%;
-    padding: 15px;
-    margin-bottom: 10px;
-  }
+.loginIcon {
+  font-size: 70px;
+  border: 6px solid black;
+  border-radius: 50%;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.loginBuho {
+  height: 20vh;
+  /* border: 6px solid black; */
+  /* border: 1px solid red; */
+  /* border-radius: 50%; */
+  padding: 15px;
+  margin-bottom: 10px;
+}
 </style>
