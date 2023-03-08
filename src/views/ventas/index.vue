@@ -37,13 +37,14 @@
                   </div>
                 </div>
 
-                <!-- <div style="width: 100%; display: flex">
+                <div style="width: 100%; display: flex">
                   <Calendar
                     inputId="fechaInicio"
                     v-model="fechaInicio"
                     autocomplete="off"
                     placeholder="Fecha de incio"
                     style="margin-right: 20px"
+                    dateFormat="dd/mm/yy"
                   />
 
                   <Calendar
@@ -52,10 +53,20 @@
                     autocomplete="off"
                     placeholder="Fecha de fin"
                     style="margin-right: 20px"
+                    dateFormat="dd/mm/yy"
                   />
 
-                  <Button icon="pi pi-search" />
-                </div> -->
+                  <Button
+                    icon="pi pi-search"
+                    @click="filtrarVentas()"
+                    style="margin-right: 10px"
+                  />
+                  <Button
+                    icon="pi pi-times-circle"
+                    @click="limpiarCampos()"
+                    class="p-button-danger"
+                  />
+                </div>
 
                 <div style="width: 100%">
                   <div style="float: right">
@@ -382,6 +393,83 @@ export default {
       });
 
       this.loading = false;
+    },
+
+    async filtrarVentas() {
+      //
+      // FECHA DE INICIO
+      //
+      let mesInicio;
+      if ((this.fechaInicio.getMonth() + 1).toString().length == 1) {
+        mesInicio = "0" + (this.fechaInicio.getMonth() + 1);
+      } else {
+        mesInicio = this.fechaInicio.getMonth() + 1;
+      }
+
+      let diaInicio;
+      if (this.fechaInicio.getDate().toString().length == 1) {
+        diaInicio = "0" + this.fechaInicio.getDate();
+      } else {
+        diaInicio = this.fechaInicio.getDate();
+      }
+
+      let fechaInicioEnviar =
+        this.fechaInicio.getFullYear() + "-" + mesInicio + "-" + diaInicio;
+
+      console.log("fechaInicioEnviar");
+      console.log(fechaInicioEnviar);
+
+      //
+      // FECHA DE FIN
+      //
+
+      let mesFin;
+      if ((this.fechaFin.getMonth() + 1).toString().length == 1) {
+        mesFin = "0" + (this.fechaFin.getMonth() + 1);
+      } else {
+        mesFin = this.fechaFin.getMonth() + 1;
+      }
+
+      let diaFin;
+      if (this.fechaFin.getDate().toString().length == 1) {
+        diaFin = "0" + this.fechaFin.getDate();
+      } else {
+        diaFin = this.fechaFin.getDate();
+      }
+
+      let fechaFinEnviar =
+        this.fechaFin.getFullYear() + "-" + mesFin + "-" + diaFin;
+
+      console.log("fechaFinEnviar");
+      console.log(fechaFinEnviar);
+
+      let params = {
+        fechaInicio: fechaInicioEnviar,
+        fechaFin: fechaFinEnviar,
+      };
+
+      this.loading = true;
+      await this.axios
+        .post("/api/venta/filtrarFecha", params)
+        .then((response) => {
+          if (response.data.code == 200) {
+            console.log("response.data");
+            console.log(response.data);
+
+            this.ventas = response.data.data;
+            console.log("this.ventas");
+            console.log(this.ventas);
+          }
+        });
+
+      this.loading = false;
+    },
+
+    limpiarCampos() {
+      this.fechaInicio = null;
+      this.fechaFin = null;
+
+      this.obtenerTodos();
     },
 
     async generarUsuariosProveedores() {

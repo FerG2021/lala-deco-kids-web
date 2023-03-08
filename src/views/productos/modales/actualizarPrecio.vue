@@ -11,35 +11,52 @@
     >
       <template #header>
         <h3 style="margin: 0px">
-          <i class="pi pi-box" style="font-size: 20px" />
-          Modificar precio de productos
+          <i class="pi pi-percentage" style="font-size: 20px" />
+          Actualizar precio de productos
         </h3>
       </template>
 
-      <div>
-        <div class="field">
-          <div class="p-float-label">
-            <InputNumber
-              id="porcentaje"
-              v-model="form.porcentaje"
-              style="width: 100%"
-              suffix=" %"
-            />
-            <label for="porcentaje">Porcentaje precio</label>
+      <div style="margin-top: 20px">
+        <form
+          @submit.prevent="handleSubmit(!v$.$invalid)"
+          class="p-fluid"
+          style="margin-top: 30px"
+        >
+          <div class="field">
+            <div class="p-float-label">
+              <InputNumber
+                id="porcentaje"
+                v-model="v$.porcentaje.$model"
+                style="width: 100%"
+                suffix=" %"
+                :class="{ 'p-invalid': v$.porcentaje.$invalid && submitted }"
+              />
+              <label
+                for="porcentaje"
+                :class="{ 'p-error': v$.porcentaje.$invalid && submitted }"
+                >Porcentaje <span style="color: red">*</span></label
+              >
+            </div>
+            <small
+              v-if="
+                (v$.porcentaje.$invalid && submitted) ||
+                v$.porcentaje.$pending.$response
+              "
+              class="p-error"
+              >{{
+                v$.porcentaje.required.$message.replace("Value", "Porcentaje")
+              }}</small
+            >
           </div>
-        </div>
-      </div>
 
-      <template #footer>
-        <Button
-          label="Guardar"
-          type="submit"
-          icon="pi pi-check"
-          autofocus
-          @click="guardar()"
-          :loading="loadingBtnGuardar"
-        />
-      </template>
+          <Button
+            label="Guardar"
+            type="submit"
+            class="mt-2"
+            :loading="loadingBtnGuardar"
+          />
+        </form>
+      </div>
     </Dialog>
   </div>
 </template>
@@ -64,78 +81,24 @@ export default {
         porcentaje: null,
       },
 
-      id: null,
-      datos: null,
-      nombreComprador: null,
-      nombreVendedor: null,
-      fechaUltimaAccion: null,
-      dniComprador: null,
-      detalleCuentaCorriente: [],
-      loadingBtnPDF: false,
+      porcentaje: null,
     };
   },
 
   validations() {
     return {
-      montoPagado: {
-        required: helpers.withMessage(
-          "El monto pagado por el cliente es requerido",
-          required
-        ),
-        // email,
-      },
-      nombre: {
-        required: helpers.withMessage("El nombre es requerido", required),
-        // email,
-      },
-      precioVenta: {
-        required: helpers.withMessage(
-          "El precio de venta es requerido",
-          required
-        ),
-        // email,
-      },
-      procPrecioFiado: {
-        required: helpers.withMessage(
-          "El procentaje de fiado es requerido",
-          required
-        ),
-        // email,
-      },
-      precioFiado: {
-        required: helpers.withMessage(
-          "El precio de fiado es requerido",
-          required
-        ),
-        // email,
-      },
-      stock: {
-        required: helpers.withMessage(
-          "El precio de fiado es requerido",
-          required
-        ),
-        // email,
-      },
-      stockMinimo: {
-        required: helpers.withMessage(
-          "El precio de fiado es requerido",
-          required
-        ),
-        // email,
+      porcentaje: {
+        required: helpers.withMessage("El porcentaje es requerido", required),
       },
     };
   },
 
   methods: {
-    abrir(id) {
-      this.id = id;
-      console.log("this.id");
-      console.log(this.id);
+    abrir() {
       this.submitted = false;
       this.display = true;
-      this.isFormValid = false;
+      // this.isFormValid = false;
       this.resetForm();
-      this.getDatos();
     },
 
     cerrar() {
@@ -148,64 +111,12 @@ export default {
       this.display = false;
     },
 
-    async getDatos() {
-      await this.axios
-        .get("/api/producto/datosWhatsApp/" + this.id)
-        .then((response) => {
-          if (response.data.code == 200) {
-            console.log("response");
-            console.log(response.data.data);
-            // this.loadingBtnPDF = false
-
-            // window.open(response.data.data, '_blank')
-            this.form.mailAsociado = response.data.data.datosClient.mailClient;
-
-            this.datos = response.data.data;
-            console.log("this.datos");
-            console.log(this.datos);
-          } else {
-          }
-        });
-    },
-
-    async exportarPDF() {
-      this.loadingBtnPDF = true;
-      await this.axios
-        .get("/api/cuentacorriente/exportarPDF/" + this.id)
-        .then((response) => {
-          console.log("response");
-          console.log(response);
-
-          this.loadingBtnPDF = false;
-
-          window.open(response.data, "_blank");
-        });
-    },
-
-    formatearFecha(fecha) {
-      let fecha1 = new Date(fecha);
-      // let fecha2 = fecha1.toLocaleString();
-      let fecha2 = fecha1.toLocaleDateString();
-      return fecha2;
-    },
-
-    onUpload() {
-      this.$toast.add({
-        severity: "info",
-        summary: "Success",
-        detail: "File Uploaded",
-        life: 3000,
-      });
-    },
-
-    imagenSeleccionada(event) {
-      console.log("imagen");
-      console.log(event.files[0]);
-      this.form.imagen = event.files[0];
-    },
-
     handleSubmit(isFormValid) {
+      console.log("isFormValid");
+      console.log(isFormValid);
+
       this.isFormValid = isFormValid;
+      console.log("entro");
 
       this.submitted = true;
 
@@ -217,28 +128,32 @@ export default {
     },
 
     toggleDialog() {
+      console.log("entro");
       this.showMessage = !this.showMessage;
 
-      if (!this.showMessage) {
-        this.resetForm();
-      }
+      this.guardar();
+
+      // if (!this.showMessage) {
+      //   this.resetForm();
+      // } else {
+      //   this.guardar();
+      // }
     },
 
     resetForm() {
-      this.datos = null;
-      this.form.mailAsociado = null;
+      this.form.porcentaje = null;
+      this.porcentaje = null;
     },
 
     async guardar() {
       this.loadingBtnGuardar = true;
 
       let params = {
-        id: this.id,
-        mailCliente: this.form.mailAsociado,
+        porcentaje: this.porcentaje,
       };
 
       await this.axios
-        .post("/api/cuentacorriente/enviarMail", params)
+        .post("/api/producto/modificarPrecio", params)
         .then((response) => {
           console.log("response");
           console.log(response);
@@ -247,7 +162,7 @@ export default {
             this.$toast.add({
               severity: "success",
               summary: "Confirmación de envío",
-              detail: "Mail enviado con éxito",
+              detail: "Precios de los productos actualizados con éxito",
               life: 3000,
             });
           }

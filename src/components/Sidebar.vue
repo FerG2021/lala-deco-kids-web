@@ -14,7 +14,7 @@
       </button>
     </div>
 
-    <h3>MENU</h3>
+    <h3 style="color: #fff">MENU</h3>
     <div class="menu">
       <!-- Home -->
       <!-- <div v-if="tipoUsuario == 1"> -->
@@ -40,7 +40,7 @@
       <!-- Usuarios -->
       <!-- <div v-if="tipoUsuario == 1"> -->
       <router-link class="button" to="/usuarios" v-if="is_expanded">
-        <i class="pi pi-cog material-icons"></i>
+        <i class="pi pi-user-plus material-icons"></i>
         <span class="text">Usuarios</span>
       </router-link>
 
@@ -56,7 +56,7 @@
           to="/usuarios"
           v-if="!is_expanded || is_expanded"
         >
-          <i class="pi pi-cog material-icons"></i>
+          <i class="pi pi-user-plus material-icons"></i>
           <span class="text">Usuarios</span>
         </router-link>
       </el-tooltip>

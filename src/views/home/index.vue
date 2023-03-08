@@ -8,12 +8,12 @@
           <div class="flex">
             <Card class="card-home" @click="$router.replace('/usuarios')">
               <template #title>
-                <h2 style="text-align: center">Administración</h2>
+                <h2 style="text-align: center">Usuarios</h2>
               </template>
               <template #content>
                 <div style="display: flex">
                   <div style="margin: auto">
-                    <i class="pi pi-user" style="font-size: 80px"></i>
+                    <i class="pi pi-user-plus" style="font-size: 80px"></i>
                   </div>
                 </div>
               </template>
