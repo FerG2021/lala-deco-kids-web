@@ -9,46 +9,64 @@
       class="flex justify-content-center"
       :draggable="false"
     >
-      <template #header icon="pi pi-refresh" style="margin: 0px" class="s">
+      <template #header>
         <h3 style="margin: 0px">
-          <i class="pi pi-google" style="font-size: 20px" /> 
+          <i class="pi pi-google" style="font-size: 20px" />
           Enviar comprobante por Mail
         </h3>
       </template>
 
-      <div style="display: flex" v-if="datos == null">
+      <div style="display: flex" v-if="loadingDatos == true">
         <div style="margin: auto">
           <ProgressSpinner style="text-align: center" />
         </div>
       </div>
 
       <div v-else>
-        <div class="field">
-          <div class="p-float-label">
-            <span>Mail asociado al cliente (Si no es correcto modificar)</span>
-            <InputText 
-              id="mailAsociado"
-              v-model="form.mailAsociado"
-              style="width: 100%"
-              mode="decimal" 
-              :useGrouping="false"
-            />
-            <label for="mailAsociado">Teléfono asociado</label>
+        <form
+          @submit.prevent="handleSubmit(!v$.$invalid)"
+          class="p-fluid"
+          style="margin-top: 30px"
+        >
+          <div class="field">
+            <div class="p-float-label">
+              <InputText
+                id="mailAsociado"
+                v-model="mailAsociado"
+                style="width: 100%"
+                mode="decimal"
+                :useGrouping="false"
+                :class="{ 'p-invalid': v$.mailAsociado.$invalid && submitted }"
+              />
+              <label
+                for="mailAsociado"
+                :class="{ 'p-error': v$.mailAsociado.$invalid && submitted }"
+                >Mail asociado <span style="color: red">*</span></label
+              >
+            </div>
+            <small
+              v-if="
+                (v$.mailAsociado.$invalid && submitted) ||
+                v$.mailAsociado.$pending.$response
+              "
+              class="p-error"
+              >{{
+                v$.mailAsociado.required.$message.replace(
+                  "Value",
+                  "Mail asociado"
+                )
+              }}</small
+            >
           </div>
-        </div>
-      </div>
-        
 
-      <template #footer>
-        <Button
-          label="Enviar mail"
-          type="submit"
-          icon="pi pi-check"
-          autofocus
-          @click="guardar()"
-          :loading="loadingBtnGuardar"
-        />
-      </template>
+          <Button
+            label="Enviar mail"
+            type="submit"
+            icon="pi pi-check"
+            :loading="loadingBtnGuardar"
+          />
+        </form>
+      </div>
     </Dialog>
   </div>
 </template>
@@ -68,10 +86,9 @@ export default {
       submitted: false,
       isFormValid: false,
       loadingBtnGuardar: false,
+      loadingDatos: true,
 
-      form: {
-        mailAsociado: null,
-      },
+      mailAsociado: null,
 
       id: null,
       datos: null,
@@ -86,45 +103,9 @@ export default {
 
   validations() {
     return {
-      montoPagado: {
-        required: helpers.withMessage("El monto pagado por el cliente es requerido", required),
-        // email,
-      },
-      nombre: {
-        required: helpers.withMessage("El nombre es requerido", required),
-        // email,
-      },
-      precioVenta: {
+      mailAsociado: {
         required: helpers.withMessage(
-          "El precio de venta es requerido",
-          required
-        ),
-        // email,
-      },
-      procPrecioFiado: {
-        required: helpers.withMessage(
-          "El procentaje de fiado es requerido",
-          required
-        ),
-        // email,
-      },
-      precioFiado: {
-        required: helpers.withMessage(
-          "El precio de fiado es requerido",
-          required
-        ),
-        // email,
-      },
-      stock: {
-        required: helpers.withMessage(
-          "El precio de fiado es requerido",
-          required
-        ),
-        // email,
-      },
-      stockMinimo: {
-        required: helpers.withMessage(
-          "El precio de fiado es requerido",
+          "El mail del cliente es requerido",
           required
         ),
         // email,
@@ -140,6 +121,7 @@ export default {
       this.submitted = false;
       this.display = true;
       this.isFormValid = false;
+      this.loadingDatos = true;
       this.resetForm();
       this.getDatos();
     },
@@ -164,54 +146,27 @@ export default {
             // this.loadingBtnPDF = false
 
             // window.open(response.data.data, '_blank')
-            this.form.mailAsociado = response.data.data.datosClient.mailClient
+            if (response.data.data.datosClient) {
+              if (response.data.data.datosClient.mailClient != "-") {
+                this.mailAsociado = response.data.data.datosClient.mailClient;
+                this.datos = response.data.data;
+                console.log("this.datos");
+                console.log(this.datos);
+              }
+            }
 
-            this.datos = response.data.data
-            console.log("this.datos");
-            console.log(this.datos);
-
-          } else {}
-        })
-    },
-
-    async exportarPDF(){
-      this.loadingBtnPDF = true
-      await this.axios
-        .get("/api/cuentacorriente/exportarPDF/" + this.id)
-        .then((response) => {
-          console.log("response");
-          console.log(response);
-
-          this.loadingBtnPDF = false
-
-          window.open(response.data, '_blank')
-        })
-    },
-
-    formatearFecha(fecha) {
-      let fecha1 = new Date(fecha);
-      // let fecha2 = fecha1.toLocaleString();
-      let fecha2 = fecha1.toLocaleDateString();
-      return fecha2;
-    },
-
-    onUpload() {
-      this.$toast.add({
-        severity: "info",
-        summary: "Success",
-        detail: "File Uploaded",
-        life: 3000,
-      });
-    },
-
-    imagenSeleccionada(event) {
-      console.log("imagen");
-      console.log(event.files[0]);
-      this.form.imagen = event.files[0];
+            this.loadingDatos = false;
+          } else {
+          }
+        });
     },
 
     handleSubmit(isFormValid) {
+      console.log("isFormValid");
+      console.log(isFormValid);
+
       this.isFormValid = isFormValid;
+      console.log("entro");
 
       this.submitted = true;
 
@@ -223,16 +178,21 @@ export default {
     },
 
     toggleDialog() {
+      console.log("entro");
       this.showMessage = !this.showMessage;
 
-      if (!this.showMessage) {
-        this.resetForm();
-      }
+      this.guardar();
+
+      // if (!this.showMessage) {
+      //   this.resetForm();
+      // } else {
+      //   this.guardar();
+      // }
     },
 
     resetForm() {
-      this.datos = null
-      this.form.mailAsociado = null
+      this.datos = null;
+      this.mailAsociado = null;
     },
 
     async guardar() {
@@ -240,8 +200,8 @@ export default {
 
       let params = {
         id: this.id,
-        mailCliente: this.form.mailAsociado,
-      }
+        mailCliente: this.mailAsociado,
+      };
 
       await this.axios
         .post("/api/venta/enviarMail", params)
@@ -261,23 +221,11 @@ export default {
           // this.loadingBtnPDF = false
 
           // window.open(response.data, '_blank')
-        })
+        });
 
       this.loadingBtnGuardar = false;
 
-      this.display = false
-    },
-
-    formatearFecha(fecha) {
-      let fecha1 = new Date(fecha);
-      // let fecha2 = fecha1.toLocaleString();
-      let fecha2 = fecha1.toLocaleDateString();
-      return fecha2;
-    },
-
-    moneda(x) {
-      let aux = parseFloat(x);
-      return aux.toLocaleString("es-AR");
+      this.display = false;
     },
   },
 };
