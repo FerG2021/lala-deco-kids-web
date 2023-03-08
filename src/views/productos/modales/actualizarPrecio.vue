@@ -173,7 +173,7 @@ export default {
         });
 
       this.loadingBtnGuardar = false;
-
+      this.$emit("actualizar-tabla");
       this.display = false;
     },
 

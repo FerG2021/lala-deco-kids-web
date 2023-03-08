@@ -220,6 +220,7 @@
 
   <modal-actualizar-precio
     ref="modalActualizarPrecio"
+    @actualizarTabla="obtenerTodos"
   ></modal-actualizar-precio>
 
   <ConfirmDialog></ConfirmDialog>
