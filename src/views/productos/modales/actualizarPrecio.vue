@@ -11,36 +11,28 @@
     >
       <template #header>
         <h3 style="margin: 0px">
-          <i class="pi pi-google" style="font-size: 20px" />
-          Enviar comprobante por Mail
+          <i class="pi pi-box" style="font-size: 20px" />
+          Modificar precio de productos
         </h3>
       </template>
 
-      <div style="display: flex" v-if="datos == null">
-        <div style="margin: auto">
-          <ProgressSpinner style="text-align: center" />
-        </div>
-      </div>
-
-      <div v-else>
+      <div>
         <div class="field">
           <div class="p-float-label">
-            <span>Mail asociado al cliente (Si no es correcto modificar)</span>
-            <InputText
-              id="mailAsociado"
-              v-model="form.mailAsociado"
+            <InputNumber
+              id="porcentaje"
+              v-model="form.porcentaje"
               style="width: 100%"
-              mode="decimal"
-              :useGrouping="false"
+              suffix=" %"
             />
-            <label for="mailAsociado">Teléfono asociado</label>
+            <label for="porcentaje">Porcentaje precio</label>
           </div>
         </div>
       </div>
 
       <template #footer>
         <Button
-          label="Enviar mail"
+          label="Guardar"
           type="submit"
           icon="pi pi-check"
           autofocus
@@ -69,7 +61,7 @@ export default {
       loadingBtnGuardar: false,
 
       form: {
-        mailAsociado: null,
+        porcentaje: null,
       },
 
       id: null,
@@ -158,7 +150,7 @@ export default {
 
     async getDatos() {
       await this.axios
-        .get("/api/cuentacorriente/datosWhatsApp/" + this.id)
+        .get("/api/producto/datosWhatsApp/" + this.id)
         .then((response) => {
           if (response.data.code == 200) {
             console.log("response");

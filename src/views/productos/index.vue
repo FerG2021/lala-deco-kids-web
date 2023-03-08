@@ -40,6 +40,11 @@
                 <div style="width: 100%">
                   <div style="float: right">
                     <Button
+                      label="Actualizar precio"
+                      @click="$refs.modalActualizarPrecio.abrir()"
+                      style="margin-right: 20px"
+                    />
+                    <Button
                       label="Nuevo producto"
                       @click="$refs.modalNuevo.abrir()"
                     />
@@ -213,6 +218,10 @@
     @actualizarTabla="obtenerTodos"
   ></modal-eliminar>
 
+  <modal-actualizar-precio
+    ref="modalActualizarPrecio"
+  ></modal-actualizar-precio>
+
   <ConfirmDialog></ConfirmDialog>
 </template>
 
@@ -223,12 +232,14 @@ import { FilterMatchMode, FilterOperator } from "primevue/api";
 import ModalNuevo from "./modales/nuevo.vue";
 import ModalModificar from "./modales/modificar.vue";
 import ModalEliminar from "./modales/eliminar.vue";
+import ModalActualizarPrecio from "./modales/actualizarPrecio.vue";
 
 export default {
   components: {
     ModalNuevo,
     ModalModificar,
     ModalEliminar,
+    ModalActualizarPrecio,
   },
 
   data() {
