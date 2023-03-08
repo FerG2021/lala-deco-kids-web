@@ -37,7 +37,7 @@
 
             <Divider layout="vertical" />
 
-            <Card class="card-home">
+            <Card class="card-home" @click="$router.replace('/ventas')">
               <template #title>
                 <h2 style="text-align: center">Ventas</h2>
               </template>
@@ -57,7 +57,7 @@
 
         <div class="card">
           <div class="flex">
-            <Card class="card-home">
+            <!-- <Card class="card-home">
               <template #title>
                 <h2 style="text-align: center">Presupuestos</h2>
               </template>
@@ -68,11 +68,30 @@
                   </div>
                 </div>
               </template>
+            </Card> -->
+
+            <!-- <Divider layout="vertical" /> -->
+
+            <Card
+              class="card-home"
+              @click="$router.replace('/cuentacorriente')"
+            >
+              <template #title>
+                <h2 style="text-align: center">Cuentas corrientes</h2>
+              </template>
+
+              <template #content>
+                <div style="display: flex">
+                  <div style="margin: auto">
+                    <i class="pi pi-credit-card" style="font-size: 80px"></i>
+                  </div>
+                </div>
+              </template>
             </Card>
 
             <Divider layout="vertical" />
 
-            <Card class="card-home">
+            <Card class="card-home" @click="$router.replace('/clientes')">
               <template #title>
                 <h2 style="text-align: center">Clientes</h2>
               </template>
@@ -81,22 +100,6 @@
                 <div style="display: flex">
                   <div style="margin: auto">
                     <i class="pi pi-users" style="font-size: 80px"></i>
-                  </div>
-                </div>
-              </template>
-            </Card>
-
-            <Divider layout="vertical" />
-
-            <Card class="card-home">
-              <template #title>
-                <h2 style="text-align: center">Cuenta corriente</h2>
-              </template>
-
-              <template #content>
-                <div style="display: flex">
-                  <div style="margin: auto">
-                    <i class="pi pi-credit-card" style="font-size: 80px"></i>
                   </div>
                 </div>
               </template>

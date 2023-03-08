@@ -89,7 +89,7 @@
                   <label
                     for="dni"
                     :class="{ 'p-error': v$.email.$invalid && submitted }"
-                    >Mail</label
+                    >Usuario</label
                   >
                 </div>
                 <small
